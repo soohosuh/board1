@@ -9,4 +9,6 @@ import java.util.List;
 public interface BoardService {
 
     List<BoardDTO> getList();
+
+    BoardDTO getOne(Integer bno);
 }

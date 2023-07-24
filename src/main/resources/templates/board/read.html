@@ -1,10 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+
+
 <body>
-$END$
+
+<div>
+  <h1>READ</h1>
+  <div>[[${dto.bno}]]</div>
+  <div>[[${dto.title}]]</div>
+  <div>[[${dto.writer}]]</div>  
+</div>
 </body>
 </html>

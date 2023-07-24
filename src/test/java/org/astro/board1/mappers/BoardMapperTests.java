@@ -2,6 +2,7 @@ package org.astro.board1.mappers;
 
 import lombok.extern.log4j.Log4j2;
 import org.astro.board1.dto.BoardDTO;
+import org.astro.board1.service.BoardService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,9 @@ public class BoardMapperTests {
 
     @Autowired(required = false)
     private BoardMapper boardMapper;
+
+    @Autowired(required = false)
+    private BoardService boardService;
 
     @Transactional
     @Commit
@@ -47,7 +51,8 @@ public class BoardMapperTests {
 
     @Test
     public void testList(){
-        List<BoardDTO> list = boardMapper.getList();
+
+        log.info(boardService.getList());
 
 
     }

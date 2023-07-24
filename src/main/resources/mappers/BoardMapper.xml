@@ -15,7 +15,11 @@
     </insert>
 
     <select id="getList" resultType="org.astro.board1.dto.BoardDTO">
-        select * from tbl_board order by desc
+        select * from tbl_board order by bno desc
+    </select>
+
+    <select id="getOne" resultType="org.astro.board1.dto.BoardDTO">
+        select * from tbl_board where bno = #{bno}
     </select>
 
 

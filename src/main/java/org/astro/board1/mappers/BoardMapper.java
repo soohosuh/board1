@@ -10,5 +10,7 @@ public interface BoardMapper {
 
     List<BoardDTO> getList();
 
+    BoardDTO getOne(Integer bno);
+
 
 }

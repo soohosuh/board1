@@ -20,4 +20,10 @@ public class BoardServiceImpl implements BoardService{
 
         return boardMapper.getList();
     }
+
+    @Override
+    public BoardDTO getOne(Integer bno) {
+
+        return boardMapper.getOne(bno);
+    }
 }
