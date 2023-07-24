@@ -16,18 +16,21 @@
         </table>
     </div>
 
-    <!-- <form class="actionForm" action="/board/list" method="get">
+    <form class="actionForm" action="/board/list" method="get">
         <input type="hidden" name="page" value="3">
         <input type="hidden" name="size" th:value="10">
-    </form> -->
+    </form>
 
-    <script layout:fragment="script" th:inline="javascript">
+    <script>
 
-        const actionForm = document.querySelector(".actionFrom")
+        const actionForm = document.querySelector(".actionForm")
 
         const boardTable = document.querySelector(".boardTable")
 
         boardTable.addEventListener("click", (e) => {
+
+            e.preventDefault()
+            e.stopPropagation()
 
             const target = e.target
 
@@ -35,12 +38,11 @@
                 return
             }
 
-            console.log("list")
+            console.log(actionForm)
 
             const bno = target.getAttribute("data-bno")
 
             console.log("BNO: " + bno)
-
             actionForm.setAttribute("action", `/board/read/${bno}`)
 
             actionForm.submit();

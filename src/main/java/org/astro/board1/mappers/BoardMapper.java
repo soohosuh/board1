@@ -12,5 +12,11 @@ public interface BoardMapper {
 
     BoardDTO getOne(Integer bno);
 
+    int insertOne(BoardDTO boardDTO);
+
+    int deleteOne(Integer bno);
+
+    int modifyOne(BoardDTO boardDTO);
+
 
 }

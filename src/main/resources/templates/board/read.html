@@ -12,5 +12,30 @@
   <div>[[${dto.title}]]</div>
   <div>[[${dto.writer}]]</div>  
 </div>
+
+<form class="actionForm">
+<button type="button" class="btnModify">수정</button>
+</form>
+
+<script layout:fragment="script" th:inline="javascript">
+
+  const btnModify = document.querySelector(".btnModify")
+  const actionForm = document.querySelector(".actionForm")
+
+  btnModify.addEventListener("click", (e) => {
+    actionForm.setAttribute("action", `/board/modify/[[${dto.bno}]]`)
+    actionForm.setAttribute("method", `get`)
+    actionForm.submit()
+
+  },false)
+
+
+
+</script>
+
+
+
+  
+
 </body>
 </html>
