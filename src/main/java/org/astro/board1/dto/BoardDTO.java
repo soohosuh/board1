@@ -9,7 +9,7 @@ import java.time.LocalDate;
 
 @Data
 @Builder
-@AllArgsConstructor
+@AllArgsConstructor 
 @NoArgsConstructor
 public class BoardDTO {
 

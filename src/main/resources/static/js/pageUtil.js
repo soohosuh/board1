@@ -1,36 +1,45 @@
-function makePages(page, size, total){
-      console.log(page,size,total)
 
-      const startNum = (Math.ceil(page/10) * 10) -9
+function makePages(page,size,total){
+  
+  console.log(page,size,total)
 
-      console.log("startNum: ", startNum)
+  const startNum = (Math.ceil(page/10)*10) -9
+  console.log("startNum: ", startNum)
+  let result = ""
 
-      let result =""
+  //이전
+  if(startNum !== 1){
+    result += `<li class="page-item"><a class="page-link" href="${startNum - 1}">&laquo;</a></li>`
+  }
 
-      //이전
-      if(startNum !== 1){
-        result += `<li class="page-item"><a class="page-link" href="${startNum - 1}">&laquo;</a></li>`
-      }
+  let temp = startNum
 
-      let temp = startNum 
-      while(true) {
+  while(true){
 
-        if(temp * size > total){
-          break;
-        }
-        console.log(temp)
+    if(temp * size > total) {
+      break;
+    } 
+    console.log(temp)
 
-        result += `<li class="page-item"><a class="page-link" href="${temp}">${temp}</a></li>`
+    result += `<li class="page-item"><a class="page-link" href="${startNum - 1}">${temp}</a></li>`
 
-        temp++;
+    temp ++
+  }
 
-      } // end while
+  // 다음
+  if(total%(size*10) === 1){
+    result += `<li class="page-item"><a class="page-link" href="${startNum + 10}">&laquo;</a></li>`
+  }
 
-      if(total % (size * 10) === 1){
-        result += `<li class="page-item"><a class="page-link" href="${startNum + 10}">&raquo;</a></li>`
-      }
+  console.log(result)
 
-      console.log(result)
+  return result
 
-      return result
-    }
+   
+
+
+
+
+
+
+}

@@ -35,7 +35,7 @@ public class BoardMapperTests {
                 .writer("user00")
                 .duedate("2023-07-30")
                 .build();
-
+            
 
         log.info("1------------------------------------");
 

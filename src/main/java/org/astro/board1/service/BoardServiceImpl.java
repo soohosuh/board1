@@ -3,6 +3,8 @@ package org.astro.board1.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.astro.board1.dto.BoardDTO;
+import org.astro.board1.dto.PageRequestDTO;
+import org.astro.board1.dto.PageResponseDTO;
 import org.astro.board1.mappers.BoardMapper;
 import org.springframework.stereotype.Service;
 
@@ -14,11 +16,18 @@ import java.util.List;
 public class BoardServiceImpl implements BoardService{
 
     private final BoardMapper boardMapper;
+
     @Override
-    public List<BoardDTO> getList() {
+    public PageResponseDTO<BoardDTO> getList(PageRequestDTO pageRequestDTO) {
+
+        List<BoardDTO> list = boardMapper.getList(pageRequestDTO);
+        long total = boardMapper.listCount(pageRequestDTO);
 
 
-        return boardMapper.getList();
+        return PageResponseDTO.<BoardDTO>withAll()
+                .list(list)
+                .total(total)
+                .build();
     }
 
     @Override

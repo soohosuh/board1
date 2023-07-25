@@ -3,6 +3,8 @@ package org.astro.board1.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.astro.board1.dto.BoardDTO;
+import org.astro.board1.dto.PageRequestDTO;
+import org.astro.board1.dto.PageResponseDTO;
 import org.astro.board1.service.BoardService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,14 +22,18 @@ import java.util.List;
 public class BoardController {
 
     private final BoardService boardService;
-    @GetMapping("list")
-    public void getList(Model model){
+    @GetMapping("/list")
+    public void getList(PageRequestDTO pageRequestDTO, Model model){
+
+        PageResponseDTO<BoardDTO> pageResponseDTO
+        = boardService.getList(pageRequestDTO);
 
         log.info("--------------------");
 
 //        List<BoardDTO> list = boardService.getList();
 //        model.addAttribute("list", list);
-        model.addAttribute("dto", boardService.getList());
+        log.info(pageResponseDTO.getTotal());
+        model.addAttribute("pageResponseDTO", pageResponseDTO); 
 
         log.info("List");
     }

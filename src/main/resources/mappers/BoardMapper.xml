@@ -15,7 +15,7 @@
     </insert>
 
     <select id="getList" resultType="org.astro.board1.dto.BoardDTO">
-        select * from tbl_board order by bno desc
+        select * from tbl_board order by bno desc limit #{skip}, #{size}    
     </select>
 
     <select id="getOne" resultType="org.astro.board1.dto.BoardDTO">
@@ -24,11 +24,15 @@
 
     <delete id="deleteOne">
         delete from tbl_board where bno = #{bno}
-    </delete>
+    </delete>                                                       
 
     <update id="modifyOne">
         update tbl_board set title = #{title}, content = #{content}, writer = #{writer} where bno = #{bno}
     </update>
+
+    <select id="listCount" resultType="long">
+        select count(*) from (select bno from tbl_board where bno > 0 limit #{countEnd}) board  
+    </select>
 
     
 
