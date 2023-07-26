@@ -20,6 +20,8 @@ public interface BoardMapper {
     int modifyOne(BoardDTO boardDTO);
 
     long listCount(PageRequestDTO pageRequestDTO);
+    
+    
 
 
 }

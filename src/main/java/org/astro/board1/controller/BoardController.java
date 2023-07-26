@@ -42,7 +42,6 @@ public class BoardController {
 
         log.info("get Read");
 
-
         model.addAttribute("dto", boardService.getOne(bno));
 
         return "/board/read";
@@ -93,4 +92,7 @@ public class BoardController {
 
         return "redirect:/board/read/" + bno;
     }
+
+
+
 }

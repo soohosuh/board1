@@ -1,22 +1,45 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/lteLayout.html}"
+      >
 
 
+      <style>
+        tr, td {
+          border: solid 2px black;
+          width: 150px;
+          padding: 6px;
+        }
+        
+        button {
+          background-color: rgba(73, 107, 219, 0.708);
+          width: 80px;
+          height: 30px;
+          font-size: 18px;
+          border-radius: 10px ;
+          
+        }
+      </style>
 
 <body>
 
-    <div>
-        <table class="boardTable">
+    <div layout:fragment="content">
+
+        <h1>List Page</h1>
+
+
+        <table class="boardTable" >
             <tr th:each="dto : ${pageResponseDTO.list}">
                 <td>[[${dto.bno}]]</td>
                 <td th:data-bno="${dto.bno}">[[${dto.title}]]</td>
                 <td>[[${dto.writer}]]</td>
             </tr>
         </table>
-    </div>
+        <a href="/board/regist">등록</a>
+    
 
-    <div>
+    <div class="card-footer clearfix">
         <ul class="pagination pagination-sm m-0 float-right boardUL">
           <li class="page-item"><a class="page-link" href="10">&laquo;</a></li>
           <li class="page-item"><a class="page-link" href="11">11</a></li>
@@ -32,8 +55,8 @@
     </form>
 
     <script src="/js/pageUtil.js"></script>
-        
-    <script th:inline="javascript">
+</div>
+    <script layout:fragment="script" th:inline="javascript">
 
         const actionForm = document.querySelector(".actionForm")
         const boardTable = document.querySelector(".boardTable")
@@ -46,6 +69,10 @@
 
             const target = e.target
             const pageNum = target.getAttribute("href")
+
+            if(!pageNum){
+                return
+            }
 
             pageObj.value = pageNum
             actionForm.setAttribute("action", `/board/list`)
@@ -62,8 +89,6 @@
         console.log("total: " + total)
 
         const pageLIStr = makePages(page, size, total)
-
-        console.log("boardUL: " + boardUL)
 
         boardUL.innerHTML = pageLIStr
 

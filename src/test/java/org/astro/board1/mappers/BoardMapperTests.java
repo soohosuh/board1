@@ -39,10 +39,10 @@ public class BoardMapperTests {
 
         log.info("1------------------------------------");
 
-        boardMapper.insert(boardDTO);
+        // boardMapper.insert(boardDTO);
 
-        log.info("2------------------------------------");
-        int count = boardMapper.insert(boardDTO);
+        // log.info("2------------------------------------");
+        // int count = boardMapper.insert(boardDTO);
 
         log.info("0------------------------------------");
         log.info("count" + count);

@@ -21,7 +21,7 @@ function makePages(page,size,total){
     } 
     console.log(temp)
 
-    result += `<li class="page-item"><a class="page-link" href="${startNum - 1}">${temp}</a></li>`
+    result += `<li class="page-item"><a class="page-link" href="${temp}">${temp}</a></li>`
 
     temp ++
   }

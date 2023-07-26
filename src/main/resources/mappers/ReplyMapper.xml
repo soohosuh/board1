@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.astro.board1.mappers.ReplyMapper">
+
+    <select id="selectList" resultType="org.astro.board1.dto.ReplyDTO">
+        select rno, gno, bno, reply, replyer
+        from tbl_reply where bno = #{bno} 
+    </select>
+
+    <select id="selectOne" resultType="org.astro.board1.dto.ReplyDTO">
+        select rno, bno, reply, replyer
+        from tbl_reply where rno = #{rno}
+    </select>
+
+
+    <insert id="insert">
+        insert into tbl_reply (bno,reply,replyer)
+        values (#{bno}, #{reply}, #{replyer})
+
+        <selectKey resultType="int" keyProperty="rno" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+
+</mapper>
