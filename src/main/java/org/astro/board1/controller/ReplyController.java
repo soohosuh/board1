@@ -32,6 +32,7 @@ public class ReplyController {
     public PageResponseDTO<ReplyDTO> getReplyList(
         @PathVariable("bno")Long bno, PageRequestDTO pageRequestDTO){
 
+        log.info("dsfdsfsfdfd");
         return service.getList(bno, pageRequestDTO);
     }
 
