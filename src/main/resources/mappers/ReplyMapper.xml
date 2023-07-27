@@ -5,6 +5,7 @@
 
 <mapper namespace="org.astro.board1.mappers.ReplyMapper">
 
+    <!-- 목록 -->
     <select id="selectList" resultType="org.astro.board1.dto.ReplyDTO">
         select rno, gno, bno, reply, replyer
         from tbl_reply where bno = #{bno} 
@@ -15,7 +16,7 @@
         from tbl_reply where rno = #{rno}
     </select>
 
-
+    <!-- 등록 -->
     <insert id="insert">
         insert into tbl_reply (bno,reply,replyer)
         values (#{bno}, #{reply}, #{replyer})
@@ -24,6 +25,11 @@
             SELECT LAST_INSERT_ID()
         </selectKey>
     </insert>
+
+    <!-- 수정 -->
+    <update id="modifyReply">
+        update tbl_reply set reply=#{reply}, replyDate=#{replyDate} where bno=#{bno} and rno=#{rno}
+    </update>
 
 
 </mapper>

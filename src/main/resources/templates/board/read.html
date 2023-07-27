@@ -7,35 +7,74 @@
 <body>
 
 <div layout:fragment="content">
-  <h1>READ</h1>
-  <div>[[${dto.bno}]]</div>
-  <div>[[${dto.title}]]</div>
-  <div>[[${dto.writer}]]</div>  
-</div>
+
+  <h1 class="mb-4">조회</h1>
+  <form method="post" th:action="@{/board/delete/} + ${dto.bno}">
+    <input type="hidden" th:value="${dto.bno}">
+    <h6 class="mb-4"></h6>
+    <div class="alert alert-light" role="alert">
+      [[${dto.title}]]
+    </div>
+    <h6 class="mb-4"></h6>
+    <div class="alert alert-light" role="alert">
+      [[${dto.content}]]
+    </div>
+    <h6 class="mb-4"></h6>
+    <div class="alert alert-light" role="alert">
+      [[${dto.writer}]]
+    </div>
+    <div>
+      <button type="button" class="btnModify">수정</button>
+      <button type="button" class="btnDelete">삭제</button>
+    </div>
+    
+  </form>
+
+  <form class="actionForm">
+  
+    <div class="mb-3">
+      <label for="replyInput" class="form-label text-dark h6" style="display:block;margin:15px 0 20px;">댓글</label>
+      <input type="text" class="form-control" name="reply" id="replyInput" style="display:inline-block;width:calc(100%/2 - 35px);" placeholder="댓글내용">
+      <input type="text" class="form-control" name="replyer" id="replyInput" style="display:inline-block;width:calc(100%/2 - 35px);" placeholder="작성자">
+      <button type="button" class="btn btn-primary btnReply">등록</button>
+
+    </div>
+  </form>
+        
+
+
+
   <ul class="replyList">
-    <!--/* <li class="p-2 mb-2 bg-secondary text-white">.bg-secondary</li> */-->
-    <h1>dd</h1>
+    <li class="p-2 mb-2 bg-secondary text-white" da>[[${dto.title}]]</li>
   </ul>
-</div>
+
+
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="/js/axios.js"></script>
+<script src="/js/pageUtil.js"></script>
+
 </div>
 
-<form class="actionForm">
-<button type="button" class="btnModify">수정</button>
-</form>
 
-
+  
 <script layout:fragment="script" th:inline="javascript">
 
   const btnModify = document.querySelector(".btnModify")
+  const btnDelete = document.querySelector(".btnDelete")
+  const btnReply = document.querySelector('.btnReply')
+  const modifyReply = document.querySelector('.modifyReply')
+  const removeReply = document.querySelector('.removeReply')
   const actionForm = document.querySelector(".actionForm")
+  const reply = document.querySelector("input[name='reply']")
+  const replyer = document.querySelector("input[name='replyer']")
+  const {bno} = [[${dto}]]
+
   // 리스트 선택자
   const replyList = document.querySelector('.replyList');
 
   const getList = async () => {
 
-    
-    const res = await axios.get(`http://localhost:8080/replies/[[${dto.bno}]]/list`)
+    const res = await axios.get(`http://localhost:8080/replies/${bno}/list`)
     console.log("----------")
 
     console.log(res);
@@ -45,17 +84,15 @@
   function getReplyList(){
 			getList().then(arr => {
 				let str = ""
-				console.log("-----------------------1")
-        console.log("-----------------------1")
-        console.log("-----------------------1")
+				
         console.log(arr)
-
-
 
 				for(let i = 0; i < arr.list.length; i++) {
           
 					const {rno, reply, replyer} = arr.list[i] 
-					str += `<li class="p-2 mb-2 bg-secondary text-white" data-id=${rno}>${reply}</li>`
+					str += `<li class="p-2 mb-2 bg-secondary text-white" data-id=${rno}>${reply} 
+            - <button type="button" class="btn btn-primary modifyReply">수정</button>
+              <button type="button" class="btn btn-primary removeReply">삭제</button></li>`
 				}
 				console.log(str)
 				replyList.innerHTML = str
@@ -65,10 +102,81 @@
 		} 
     getReplyList()
 
+    const addReply = async () => {
+
+      const replyParam = {
+        reply:reply.value,
+        replyer:replyer.value
+      }
+
+      console.log("----------")
+      console.log("----------")
+      console.log(replyParam)
+
+      const res = await axios.post(`http://localhost:8080/replies/${bno}/new` , replyParam)
+
+      console.log(res.data);
+      return res.data
+    }
+
   btnModify.addEventListener("click", (e) => {
     actionForm.setAttribute("action", `/board/modify/[[${dto.bno}]]`)
     actionForm.setAttribute("method", `get`)
     actionForm.submit()
+  },false)
+
+  btnDelete.addEventListener("click", (e) => {
+    actionForm.setAttribute("action", `/board/list/${bno}`)
+    actionForm.setAttribute("method", `get`)
+    actionForm.submit()
+  },false)
+
+  //댓글 등록버튼
+  btnReply.addEventListener("click", (e) => {
+
+    console.log("인설트 버튼까진 잘들어왔어요.")
+    addReply().then( data => {
+
+      getReplyList()
+
+    }).catch(e => {
+      alert("asd")
+    })
+
+  },false)
+
+  //댓글 수정버튼
+  modifyReply.addEventListener("click", (e) => {
+
+    console.log("댓글 수정 완료")
+    const target = e.target
+
+    if(!target.getAttribute("data-rno")){
+        return
+    }
+
+    console.log(actionForm)
+
+    const rno = target.getAttribute("data-rno")
+
+    console.log("RNO: " + rno)
+    actionForm.setAttribute("action", `/board/read/${rno}`)
+
+    actionForm.submit();
+
+  },false)
+  
+  //댓글 삭제버튼
+  modifyReply.addEventListener("click", (e) => {
+
+    console.log("댓글이 삭제되었습니다.")
+    addReply().then( data => {
+
+      getReplyList()
+
+    }).catch(e => {
+      alert("asd")
+    })
 
   },false)
 

@@ -12,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,18 +33,30 @@ public class ReplyController {
     public PageResponseDTO<ReplyDTO> getReplyList(
         @PathVariable("bno")Long bno, PageRequestDTO pageRequestDTO){
 
-        log.info("dsfdsfsfdfd");
+
         return service.getList(bno, pageRequestDTO);
     }
 
     @PostMapping("{bno}/new")
     public Map<String, Long> register(@PathVariable("bno")Long bno, @RequestBody ReplyDTO replyDTO){
 
-        //replyDTO.setBno(bno);
+        log.info("bno"  + bno);
+        
+
+        replyDTO.setBno(bno);
+        log.info(replyDTO);
 
         Long rno = service.register(replyDTO);
 
+        log.info(rno);
+
         return Map.of("result",rno);
+    }
+
+    @PutMapping("{rno}")
+    public int modifyReply(@PathVariable("rno") int rno, ReplyDTO replyDTO){
+
+        return service.modifyReply(replyDTO);
     }
     
 }

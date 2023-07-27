@@ -13,5 +13,7 @@ public interface ReplyService {
     ReplyDTO selectOne(Long rno);
 
     Long register(ReplyDTO replyDTO);
+
+    int modifyReply(ReplyDTO replyDTO);
     
 }

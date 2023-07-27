@@ -43,6 +43,12 @@ public class ReplyServiceImpl implements ReplyService {
         return replyMapper.insert(replyDTO);
 
     }
+
+    @Override
+    public int modifyReply(ReplyDTO replyDTO) {
+        
+        return replyMapper.modifyReply(replyDTO);
+    }
     
     
 }
