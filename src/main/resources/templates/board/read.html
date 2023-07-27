@@ -12,15 +12,58 @@
   <div>[[${dto.title}]]</div>
   <div>[[${dto.writer}]]</div>  
 </div>
+  <ul class="replyList">
+    <!--/* <li class="p-2 mb-2 bg-secondary text-white">.bg-secondary</li> */-->
+    <h1>dd</h1>
+  </ul>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</div>
 
 <form class="actionForm">
 <button type="button" class="btnModify">수정</button>
 </form>
 
+
 <script layout:fragment="script" th:inline="javascript">
 
   const btnModify = document.querySelector(".btnModify")
   const actionForm = document.querySelector(".actionForm")
+  // 리스트 선택자
+  const replyList = document.querySelector('.replyList');
+
+  const getList = async () => {
+
+    
+    const res = await axios.get(`http://localhost:8080/replies/[[${dto.bno}]]/list`)
+    console.log("----------")
+
+    console.log(res);
+    return res.data 
+  }
+
+  function getReplyList(){
+			getList().then(arr => {
+				let str = ""
+				console.log("-----------------------1")
+        console.log("-----------------------1")
+        console.log("-----------------------1")
+        console.log(arr)
+
+
+
+				for(let i = 0; i < arr.list.length; i++) {
+          
+					const {rno, reply, replyer} = arr.list[i] 
+					str += `<li class="p-2 mb-2 bg-secondary text-white" data-id=${rno}>${reply}</li>`
+				}
+				console.log(str)
+				replyList.innerHTML = str
+			}).catch(e => {
+        alert("aaaa")
+      })
+		} 
+    getReplyList()
 
   btnModify.addEventListener("click", (e) => {
     actionForm.setAttribute("action", `/board/modify/[[${dto.bno}]]`)
