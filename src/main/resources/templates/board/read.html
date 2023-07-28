@@ -1,156 +1,330 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/lteLayout.html}">
 
-      <style>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Board Read</title>
+</head>
 
-        div .list {
-          border: 2px solid black; 
-          margin-bottom: 4px;
-          margin-top: 4px;
-          padding: 4px;
-        }
-      
-        button {
-          background-color: rgb(197, 194, 194);
-          width: 50px;
-          height: 30px;
-          font-size: 15px;
-          border-radius: 10px ;
-          
-        }  
-      
-      </style>
 
 <body>
+<div class="container-fluid pt-4 px-4" layout:fragment="content">
 
-<div>
-  <h1>READ PAGE</h1>
+  <div class="col-sm-12 col-xl-12">
+    <div class="bg-light rounded h-100 p-4">
+      <h2 class="mb-4">Board Read</h2>
+      <hr>
+      <h4 class="mb-4">No</h4>
+      <div class="alert alert-light" role="alert">[[${dto.bno}]]</div>
+      <h4 class="mb-4">Title</h4>
+      <div class="alert alert-light" role="alert">[[${dto.title}]]</div>
+      <h4 class="mb-4">Writer</h4>
+      <div class="alert alert-light" role="alert">[[${dto.writer}]]</div>
+      <h4 class="mb-4">Content</h4>
+      <div class="alert alert-light" role="alert" style="min-height: 100px;">[[${dto.content}]]</div>
+      <h4 class="mb-4">Duedate</h4>
+      <div class="alert alert-light" role="alert">[[${dto.duedate}]]</div>
+      <div class="button_wrap">
+        <a th:href="@{|/board/list?${pageRequestDTO.link}|}" class="btn btn-primary btnList">List</a>
+        <a th:href="@{|/board/modify/${bno}?${pageRequestDTO.link}|}" class="btn btn-info text-white btnModify">Modify</a>
+      </div>
+    </div>
+    
+    <div class="col-sm-12 col-md-12 col-xl-12">
+      <div class="h-100 bg-light rounded p-4">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+          <h6 class="mb-0">Reply Register</h6>
+        </div>
+        <div class="mb-3 replyRegister">
+          <input type="hidden" name="bno" th:value="${dto.bno}">
+          <input type="hidden" name="reply" class="form-control">
+          <input type="hidden" name="replyer" value="USER00">
+        </div>
+        <div class="button_wrap">
+          <button class="btn btn-primary btnRegister">Reply Register</button>
+        </div>
+      </div>
+    </div>
 
-  <form method="get" action="/board/list">
-    <button>리스트</button>
-  </form>
-  <br>
+    <div class="col-sm-12 col-md-12 col-xl-12">
+      <div class="h-100 bg-light rounded p-4">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+          <h6 class="mb-0">Reply</h6>
+        </div>
+        <div class="replyWrap"></div>
+        <div class="btn-toolbar" role="toolbar" style="justify-content: center">
+          <!--/* paging */-->
+          <ul class="btn-group me-2 paging replyPaging" role="group" aria-label="First group"></ul>
+        </div>
+      </div>
+    </div>
 
-  <div class="list">[[${dto.bno}]]</div>
-  <div class="list">[[${dto.title}]]</div>
-  <div class="list">[[${dto.content}]]</div>
-  <div class="list">[[${dto.writer}]]</div>
-  <div class="list">[[${dto.duedate}]]</div>
+    <div class="modal alertModal" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-body">[[${message}]]</div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
-  <form class="actionForm">
-    <button class="btnModify">수정</button>
-    <button class="btnDelete">삭제</button>
-  </form>
+    <div class="modal replyModal" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            Reply Register 
+          </div>
+          <div class="modal-body replyRegister2">
+            <input type="hidden" name="bno" th:value="${dto.bno}">
+            <input type="text" name="reply" class="form-control">
+            <input type="text" name="replyer" value="USER00">
+            <input type="hidden" name="gno" value="0">
+            <div class="replyGno"></div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-primary btnRegister2">Reply Register</button>
+            <button type="button" class="btn btn-secondary closeBtn" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
-  <br>
-  댓글
-  <br>
-  <div>
-    <input type="text" name="reply" id="replyInput" value="AAA">
-    <input type="text" name="replyer" id="replyerInput" value="AAA">
-    <button type="button" class="btnReply">ADD</button>
+    <div class="modal replyModModal" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            Reply Modify
+          </div>
+          <div class="modal-body replyModify">
+            <input type="hidden" name="reply" class="form-control">
+            <input type="hidden" name="replyer" value="USER00">
+            <div class="replyModifyVal"></div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-primary btnReplyModify">Reply Modify</button>
+            <button class="btn btn-danger btnDelete">Reply Delete</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="/js/replyAxios.js"></script>
+    
+
+
   </div>
 
-  <div>
-    <ul class="replyUL">
+<script layout:fragment="script" th:inline = "javascript">
 
-    </ul>
-  </div>
+    const realPath = "http://" + window.location.host;
+    const {bno, status} = [[${dto}]]
+    const alertModal = new bootstrap.Modal(document.querySelector(".alertModal"))
+    const replyModal = new bootstrap.Modal(document.querySelector(".replyModal"))
+    const replyModModal = new bootstrap.Modal(document.querySelector(".replyModModal"))
+    const replyPaging = document.querySelector(".replyPaging")
+    const replyWrap = document.querySelector(".replyWrap")
+    const replyRegister = document.querySelector(".replyRegister")
+    const replyRegister2 = document.querySelector(".replyRegister2")
+    const replyGno = replyRegister2.querySelector(".replyGno")
+    const replyModify = document.querySelector(".replyModify")
+    const replyModifyVal = replyModify.querySelector(".replyModifyVal")
+    const btnRegister = document.querySelector(".btnRegister")
+    const btnRegister2 = document.querySelector(".btnRegister2")
+    const btnDelete = document.querySelector(".btnDelete")
+    const btnReplyModify = document.querySelector(".btnReplyModify")
+    const closeBtn = document.querySelector(".closeBtn");
 
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    closeBtn.addEventListener("click" , e => {
 
-</div>
+      replyModal.hide();
 
-<script th:inline = "javascript">
-
-  //수정, 삭제
-  const btnModify = document.querySelector(".btnModify")
-  const btnDelete = document.querySelector(".btnDelete")
-  const actionForm = document.querySelector(".actionForm")
-
-  //댓글
-  const replyUL = document.querySelector(".replyUL")
-
-  const {bno} = [[${dto}]]
-
-  const btnReply = document.querySelector(".btnReply")
-
-  //댓글 목록을 가져오는 함수
-  const getRemoteList = async(pageNum) => {
-    const {data} = await axios.get(`http://localhost:8080/replies/${bno}/list`)
-
-    console.log(data)
-
-    return data
-  }
-
-  const getReplyList = async(page, geEnd = false) => {
-
-    const data = await getRemoteList(page)
-
-    console.log("getReplyList..........")
-    console.log(data)
-
-    const {list, total} = data
-
-    let str = ""
-
-    for(let i = 0; i < list.length; i++){
-
-      const {rno, reply, replyer} = list[i]
-
-      str += `<li data-rno=${rno}>${rno} - ${reply} - ${replyer}</li>`
-    } //end for
-
-    replyUL.innerHTML = str
-
-    console.log("str----"+str)
-
-  }
-  getReplyList()
-
-  const postRemoteAdd = async(reply) => {
-    const {data} = await axios.post(`http://localhost:8080/replies/${bno}/new`, reply)
-    return data
-  }
-
-  btnReply.addEventListener("click", e => {
-    const replyVal = document.querySelector("input[name=reply]").value
-    const replyerVal = document.querySelector("input[name=replyer]").value
-
-    const temp = {reply : replyVal, replyer : replyerVal}
-
-    postRemoteAdd(temp).then(result => {
-      console.log(result)
-      getReplyList()
     })
-  }, false)
 
-  btnModify.addEventListener("click", (e) => {
-    actionForm.setAttribute("action", `/board/modify/[[${dto.bno}]]`)
-    actionForm.setAttribute("method", `get`)
-    actionForm.submit()
-  })
+    //삭제된 게시물은 list로 return처리
+    // if(!status){
+    //   alert("삭제된 게시물입니다.")
+    //   window.location.href = realPath + "/board/list"
+    // }
 
-  btnDelete.addEventListener("click", (e) => {
-    actionForm.setAttribute("action", `/board/delete/[[${dto.bno}]]`)
-    actionForm.setAttribute("method", `post`)
-    actionForm.submit()
-  })
+    //수정된 게시물 modal view
+    if([[${message}]] != null){
+      alertModal.show()
+    }
 
+    //댓글
+    //댓글 등록
+    btnRegister.addEventListener("click", (e) => {
+      //이벤트 막기
+      e.preventDefault()
+      e.stopPropagation()
 
+      //value 가져오기
+      const bno = replyRegister.querySelector("input[name=bno]").value
+      const reply = replyRegister.querySelector("input[name=reply]").value
+      const replyer = replyRegister.querySelector("input[name=replyer]").value
 
+      // if(reply === ''){
+      //   alert("댓글 내용을 입력하세요")
+      //   return
+      // }
+
+      replyModal.show();
+
+      // //객체로 만들기
+      // const temp = {bno, reply, replyer, gno}
+
+      // postRegister(temp).then(data => {
+      //   alert(data.result + "번 댓글이 등록되었습니다.")
+      //   replyRegister.querySelector("input[name=reply]").value = ""
+      //   getListDefault()
+      // })
+    }, false)
+    // /댓글 등록
+
+    //대댓글 모달 보여주기
+    replyWrap.addEventListener("click", (e) => {
+      //event 막기
+      e.preventDefault()
+      e.stopPropagation()
+
+      //target 찾기
+      const target = e.target
+      const result = target.getAttribute("data-reply")
+      const gno = target.getAttribute("data-gno")
+
+      if(result === "reply"){
+        replyModal.show()
+        replyRegister2.querySelector("input[name=reply]").value = ""
+        replyGno.innerHTML = `<input type="hidden" name="gno" value="${gno}">`
+      }
+    }, false)
+    // /대댓글 모달 보여주기
+
+    //대댓글 등록
+    btnRegister2.addEventListener("click", (e) => {
+      e.preventDefault()
+      e.stopPropagation()
+
+      //value 가져오기
+      const bno = replyRegister2.querySelector("input[name=bno]").value
+      const reply = replyRegister2.querySelector("input[name=reply]").value
+      const replyer = replyRegister2.querySelector("input[name=replyer]").value
+      const gno = replyRegister2.querySelector("input[name=gno]").value
+
+      
+
+      if(reply === ''){
+        alert("댓글 내용을 입력하세요")
+        return
+      }
+
+      // 객체로 만들기
+      const temp = {bno, reply, replyer, gno}
+
+      postRegister(temp).then(data => {
+        alert(data.result + "번 댓글이 등록되었습니다")
+        replyRegister.querySelector("input[name=reply]").value = ""
+        getListDefault()
+        replyModal.hide()
+      })
+    },false)
+    // /대댓글 등록 
+
+    //댓글 수정 모달
+    replyWrap.addEventListener("click", (e) => {
+      //event 막기
+      e.preventDefault()
+      e.stopPropagation()
+
+      //target 찾기
+      const target = e.target
+      const rno = target.getAttribute("data-rno")
+
+      getReadOne(rno).then(data => {
+        console.log(data)
+        if(!data.status){
+          alert("삭제된 댓글입니다")
+          return
+        }
+        replyModal.hide()
+        replyModify.querySelector("input[name=reply]").value = data.reply
+        replyModifyVal.innerHTML = `<input type="hidden" name="rno" value="${rno}">`
+      })
+    }, false)
+    // /댓글 수정모달
+
+    //댓글 삭제
+    btnDelete.addEventListener("click", (e) => {
+      //event 막기
+      e.preventDefault()
+      e.stopPropagation()
+      //target 찾기
+      const target = e.target
+      const rno = target.closet(".replyMoModal").querySelector("input[name=rno]").value
+
+      deleteReply(rno).then(data => {
+        alert(`${rno}번 댓글이 삭제 되었습니다.`)
+        replyModModal.hide()
+        getListDefault()
+      })
+    })
+    // /    댓글 삭제
+
+    //댓글 수정
+    btnReplyModify.addEventListener("click", (e) => {
+      //event 막기
+      e.preventDefault()
+      e.stopPropagation()
+      //target 찾기
+      const target = e.target
+      const rno = replyModify.querySelector("input[name=rno]").value
+      const reply = replyModify.querySelector("input[name=reply]").value
+
+      //객체로 만들기
+      const temp = {rno, reply}
+
+      putReply(temp).then(data => {
+        alert(data.result + "번 댓글이 수정되었습니다.")
+        getListDefault()
+        replyModModal.hide()
+      })
+    })
+    // /댓글 수정
+
+    // 댓글 페이징 처리
+    replyPaging.addEventListener("click", (e) => {
+      e.preventDefault()
+      e.stopPropagation()
+
+      //target 찾기
+      const target = e.target
+      //paging 번호 찾기
+      const pageNum = target.getAttribute("data-page")
+
+      //페이징 변경해주기
+      getListDefault(true, pageNum)
+
+    }, false)
+    // /댓글 페이징 처리
+
+    // 최초 list 불러 오기
+    getListDefault()
+    // /댓글
 
 
 
 </script>
-
-  
-
-
-
-  
-
 </body>
+
 </html>

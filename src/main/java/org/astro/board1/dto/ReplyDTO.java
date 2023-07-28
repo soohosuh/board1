@@ -22,5 +22,6 @@ public class ReplyDTO {
     private LocalDate replyDate;
 
     private long gno = 0L;
-    
+    private int step;                   //대댓글 여부 확인
+    private boolean status;             //댓글 삭제여부
 }

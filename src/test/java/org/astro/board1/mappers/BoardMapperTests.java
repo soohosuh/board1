@@ -45,14 +45,14 @@ public class BoardMapperTests {
         // int count = boardMapper.insert(boardDTO);
 
         log.info("0------------------------------------");
-        log.info("count" + count);
+        //log.info("count" + count);
 
     }
 
     @Test
     public void testList(){
 
-        log.info(boardService.getList());
+        //log.info(boardService.getList());
 
 
     }

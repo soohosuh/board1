@@ -58,5 +58,8 @@ public class ReplyController {
 
         return service.modifyReply(replyDTO);
     }
+
+    //입력
+    // replies/517/register
     
 }

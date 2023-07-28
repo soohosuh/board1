@@ -12,7 +12,7 @@
     </select>
 
     <select id="selectOne" resultType="org.astro.board1.dto.ReplyDTO">
-        select rno, bno, reply, replyer
+        select rno, bno, reply, replyer ,gno
         from tbl_reply where rno = #{rno}
     </select>
 

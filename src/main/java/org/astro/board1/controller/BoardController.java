@@ -38,7 +38,7 @@ public class BoardController {
         log.info("List");
     }
     @GetMapping("read/{bno}")
-    public String getRead(@PathVariable("bno")Integer bno, Model model){
+    public String getRead(@PathVariable("bno")Integer bno, PageRequestDTO pageRequestDTO, Model model){
 
         log.info("get Read");
 
