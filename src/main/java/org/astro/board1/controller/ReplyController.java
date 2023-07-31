@@ -26,9 +26,12 @@ import lombok.extern.log4j.Log4j2;
 @RequestMapping("/replies/")
 public class ReplyController {
 
+    // service 의존성 주입
     private final ReplyService service;
 
 
+    //list
+    //produces: 만들어내는 데이터
     @GetMapping(value = "{bno}/list", produces = MediaType.APPLICATION_JSON_VALUE)
     public PageResponseDTO<ReplyDTO> getReplyList(
         @PathVariable("bno")Long bno, PageRequestDTO pageRequestDTO){
@@ -37,12 +40,15 @@ public class ReplyController {
         return service.getList(bno, pageRequestDTO);
     }
 
-    @PostMapping("{bno}/new")
+    //register
+    //@RequestBody: 보내는 데이터 JSON형식
+    //rno 데이터 전달 위해 return타입 Map
+    @PostMapping("{bno}/register")
     public Map<String, Long> register(@PathVariable("bno")Long bno, @RequestBody ReplyDTO replyDTO){
 
         log.info("bno"  + bno);
         
-
+        //안전장치
         replyDTO.setBno(bno);
         log.info(replyDTO);
 
@@ -50,9 +56,10 @@ public class ReplyController {
 
         log.info(rno);
 
-        return Map.of("result",rno);
+        return Map.of("result", rno);
     }
 
+    // modify
     @PutMapping("{rno}")
     public int modifyReply(@PathVariable("rno") int rno, ReplyDTO replyDTO){
 

@@ -44,7 +44,7 @@
           <input type="hidden" name="replyer" value="USER00">
         </div>
         <div class="button_wrap">
-          <button class="btn btn-primary btnRegister">Reply Register</button>
+          <button class="btn btn-primary btnRegisterForm">Reply Register</button>
         </div>
       </div>
     </div>
@@ -69,7 +69,7 @@
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
           </div>
-        </div>
+        </div>  
       </div>
     </div>
 
@@ -103,12 +103,14 @@
           <div class="modal-body replyModify">
             <input type="hidden" name="reply" class="form-control">
             <input type="hidden" name="replyer" value="USER00">
-            <div class="replyModifyVal"></div>
+            <div class="replyModifyVal">
+
+            </div>
           </div>
           <div class="modal-footer">
             <button class="btn btn-primary btnReplyModify">Reply Modify</button>
             <button class="btn btn-danger btnDelete">Reply Delete</button>
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-secondary closeBtn" data-bs-dismiss="modal">Close</button>
           </div>
         </div>
       </div>
@@ -145,7 +147,20 @@
     const btnReplyModify = document.querySelector(".btnReplyModify")
     const closeBtn = document.querySelector(".closeBtn");
 
+    const btnRegisterForm = document.querySelector(".btnRegisterForm")
+
+    btnRegisterForm.addEventListener("click", (e) => {
+
+      e.preventDefault()
+      e.stopPropagation()
+
+      replyModal.show()
+    })
+
+
+
     closeBtn.addEventListener("click" , e => {
+
 
       replyModal.hide();
 
@@ -164,33 +179,33 @@
 
     //댓글
     //댓글 등록
-    btnRegister.addEventListener("click", (e) => {
-      //이벤트 막기
-      e.preventDefault()
-      e.stopPropagation()
+    // btnRegister.addEventListener("click", (e) => {
+    //   //이벤트 막기
+    //   e.preventDefault()
+    //   e.stopPropagation()
 
-      //value 가져오기
-      const bno = replyRegister.querySelector("input[name=bno]").value
-      const reply = replyRegister.querySelector("input[name=reply]").value
-      const replyer = replyRegister.querySelector("input[name=replyer]").value
+    //   //value 가져오기
+    //   const bno = replyRegister.querySelector("input[name=bno]").value
+    //   const reply = replyRegister.querySelector("input[name=reply]").value
+    //   const replyer = replyRegister.querySelector("input[name=replyer]").value
 
-      // if(reply === ''){
-      //   alert("댓글 내용을 입력하세요")
-      //   return
-      // }
+    //   if(reply === ''){
+    //     alert("댓글 내용을 입력하세요")
+    //     return
+    //   }
 
-      replyModal.show();
+    //   replyModal.show();
 
-      // //객체로 만들기
-      // const temp = {bno, reply, replyer, gno}
+    //   //객체로 만들기
+    //   const temp = {bno, reply, replyer, gno}
 
-      // postRegister(temp).then(data => {
-      //   alert(data.result + "번 댓글이 등록되었습니다.")
-      //   replyRegister.querySelector("input[name=reply]").value = ""
-      //   getListDefault()
-      // })
-    }, false)
-    // /댓글 등록
+    //   postRegister(temp).then(data => {
+    //     alert(data.result + "번 댓글이 등록되었습니다.")
+    //     replyRegister.querySelector("input[name=reply]").value = ""
+    //     getListDefault()
+    //   })
+    // }, false)
+    // // /댓글 등록
 
     //대댓글 모달 보여주기
     replyWrap.addEventListener("click", (e) => {
@@ -207,6 +222,10 @@
         replyModal.show()
         replyRegister2.querySelector("input[name=reply]").value = ""
         replyGno.innerHTML = `<input type="hidden" name="gno" value="${gno}">`
+      }else if(result === "modify"){
+        replyModModal.show()
+        replyRegister2.querySelector("input[name=reply]").value = ""
+        replyGno.innerHTML = `<input type="hidden" name="gno" value="${gno}">`
       }
     }, false)
     // /대댓글 모달 보여주기
@@ -221,8 +240,6 @@
       const reply = replyRegister2.querySelector("input[name=reply]").value
       const replyer = replyRegister2.querySelector("input[name=replyer]").value
       const gno = replyRegister2.querySelector("input[name=gno]").value
-
-      
 
       if(reply === ''){
         alert("댓글 내용을 입력하세요")
@@ -259,7 +276,7 @@
         }
         replyModal.hide()
         replyModify.querySelector("input[name=reply]").value = data.reply
-        replyModifyVal.innerHTML = `<input type="hidden" name="rno" value="${rno}">`
+        replyModifyVal.innerHTML = `<input type="text" name="rno" value="${rno}">`
       })
     }, false)
     // /댓글 수정모달
@@ -283,13 +300,24 @@
 
     //댓글 수정
     btnReplyModify.addEventListener("click", (e) => {
+
+      const target = e.target
+      console.log("-----------------------------------------")
+
+      const rno = target.getAttribute("data-rno")
+      console.log(rno)
       //event 막기
       e.preventDefault()
       e.stopPropagation()
       //target 찾기
-      const target = e.target
-      const rno = replyModify.querySelector("input[name=rno]").value
+      
+      // const rno = replyModify.querySelector("input[name=rno]").value
       const reply = replyModify.querySelector("input[name=reply]").value
+
+
+      console.log("========")
+      console.log(rno)
+      console.log(reply)
 
       //객체로 만들기
       const temp = {rno, reply}

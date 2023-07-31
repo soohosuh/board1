@@ -10,13 +10,20 @@ import java.util.List;
 @Transactional
 public interface BoardService {
 
+    //list
     PageResponseDTO<BoardDTO> getList(PageRequestDTO pageRequestDTO);
 
+    //read
     BoardDTO getOne(Integer bno);
 
-    int insertOne(BoardDTO boardDTO);
+    //register
+    int insertOne(BoardDTO boardDTO, boolean makeThumbnail);
 
+    //delete
     int deleteOne(Integer bno);
 
+    //modify
     int modifyOne(BoardDTO boardDTO);
+
+    List<String> getImages(Integer pno);
 }
