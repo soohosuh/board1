@@ -22,15 +22,6 @@
         select * from tbl_board where bno = #{bno}
     </select>
 
-    <!-- ReplyDTO
-    <select id="getReply" resultType="org.astro.board1.dto.ReplyDTO">
-        select tr.*
-        from tbl_board tb left outer join tbl_reply tr on tb.bno = tr.bno
-        where tb.bno = #{bno}
-    </select> -->
-
-
-
     <delete id="deleteOne">
         delete from tbl_board where bno = #{bno}
     </delete>                                                       

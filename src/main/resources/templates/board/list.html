@@ -3,113 +3,176 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/lteLayout.html}"
       >
-
-
-      <style>
-        tr, td {
-          border: solid 2px black;
-          width: 150px;
-          padding: 6px;
-        }
-        
-        button {
-          background-color: rgba(73, 107, 219, 0.708);
-          width: 80px;
-          height: 30px;
-          font-size: 18px;
-          border-radius: 10px ;
-          
-        }
-      </style>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Board List</title>
+</head>
 
 <body>
 
-    <div layout:fragment="content">
+    <div class="container-fluid pt-4 px-4" layout:fragment="content">
+        <!--/* [[${boardList}]]
+        <div>[[${pageRequestDTO}]]</div> */-->
 
-        <h1>List Page</h1>
+        <div class="col-sm-12 col-xl-12">
+            <div class="bg-light rounded h-100 p-4">
+            <h1>List Page</h1>
+            <!--/* 검색영역 */-->
+            <div class="mb-3 searchWrap">
+                <form action="/board/list" method="get" class="actionForm">
+                <input type="hidden" name="page" th:value="${pageRequestDTO.page}">
+                <input type="hidden" name="size" th:value="${pageRequestDTO.size}">
+                <select name="type" class="form-select mb-3">
+                    <option value="">선택해주세요</option>
+                    <option value="t" th:selected="${pageRequestDTO.type == 't'}">제목</option>
+                    <option value="c" th:selected="${pageRequestDTO.type == 'c'}">내용</option>
+                    <option value="w" th:selected="${pageRequestDTO.type == 'w'}">작성자</option>
+                    <option value="tc" th:selected="${pageRequestDTO.type == 'tc'}">제목+내용</option>
+                    <option value="tcw" th:selected="${pageRequestDTO.type == 'tcw'}">제목+내용+작성자</option>
+                </select>
+                <input type="text" name="keyword" class="form-control mb-3" placeholder="검색어를 입력 해주세요." th:value="${pageRequestDTO.keyword}">
+                <div class="button_wrap">
+                    <button type="submit" class="btn btn-primary btnSearch">검색</button>
+                </div>
+                </form>
+            </div>
 
 
-        <table class="boardTable" >
-            <tr th:each="dto : ${pageResponseDTO.list}">
-                <td>[[${dto.bno}]]</td>
-                <td th:data-bno="${dto.bno}">[[${dto.title}]]</td>
-                <td>[[${dto.writer}]]</td>
-            </tr>
-        </table>
-        <a href="/board/regist">등록</a>
-    
+            <!--/* //검색영역 */-->
+            <table class="table table-hover boardTable">
+                <colgroup>
+                <col style="width:7%" />
+                <col style="width:53%" />
+                <col style="width:13%" />
+                <col style="width:20%" />
+                <col style="width:7%" />
+                </colgroup>
+                <thead>
+                <tr>
+                    <th scope="col" class="text-center">No</th>
+                    <th scope="col" class="text-center">Title</th>
+                    <th scope="col" class="text-center">Writer</th>
+                    <th scope="col" class="text-center">Date</th>
+                    <th scope="col" class="text-center">views</th>
+                </tr>
+                </thead>
+                
+                <tbody>
+                    <tr th:each="list : ${boardList.list}">
+                      <td class="text-center">[[${list.bno}]]</td>
+                      <td>
+                        <div class="board_title">
+                          <div class="ellipsis">
+                            <a th:href="@{|/board/read/${list.bno}?${pageRequestDTO.link}|}">
+                              <img th:if="${list.fileName}" th:src="|http://localhost/s_${list.fileName}|" />
+                              <img th:unless="${list.fileName}" th:src="|http://localhost/noimage.png|" width="80" />
+                              <span style="margin-left: 5px;">[[${list.title}]]</span>
+                            </a>
+                          </div>
+                          <span>([[${list.replycnt}]])</span>
+                        </div>
+                      </td>
+                      <td class="text-center">[[${list.writer}]]</td>
+                      <td class="text-center">[[${#temporals.format(list.dueDate, 'yyyy-MM-dd')}]]</td>
+                      <td class="text-center">[[${list.viewcnt}]]</td>
+                    </tr>
+                  </tbody>
 
-    <div class="card-footer clearfix">
-        <ul class="pagination pagination-sm m-0 float-right boardUL">
-          
-        </ul>
-    </div>  
+            </table>
 
-    <form class="actionForm" action="/board/list" method="get">                                                                             
-        <input type="hidden" name="page" value="3">
-        <input type="hidden" name="size" th:value="${pageRequestDTO.size}">
-    </form>
+            
+            <div class="btn-toolbar" role="toolbar" style="justify-content: center;">
+                <!--/* paging */-->
+                <ul class="btn-group me-2 paging" role="group" aria-label="First group">
+                  <li th:if="${boardList.prevBtn}"><a th:href="${boardList.startNum - 1}" class="btn btn-primary"></a></li>
+      
+                  <th:block th:each="i: ${#numbers.sequence(boardList.startNum, boardList.endNum)}">
+                  <li th:class="${boardList.page == i} ? 'active' : ''">
+                    <a th:href="${i}" class="btn btn-primary">[[${i}]]</a>
+                  </li>
+                  </th:block>
+      
+                  <li th:if="${boardList.nextBtn}"><a th:href="${boardList.endNum + 1}" class="btn btn-primary">></a></li>
+                </ul>
+              </div>
+              <div class="button_wrap">
+                <a href="/board/register" class="btn btn-primary">Register</a>
+              </div>
+            </div>
+        </div>
+      
+          <div class="modal alertModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-body">[[${message}]]</div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+    </div>
 
-    <script src="/js/pageUtil.js"></script>
-</div>
     <script layout:fragment="script" th:inline="javascript">
 
+        //선택자
+        const alertModal = new bootstrap.Modal(document.querySelector(".alertModal"))
+        const paging = document.querySelector(".paging")
         const actionForm = document.querySelector(".actionForm")
-        const boardTable = document.querySelector(".boardTable")
-        const pageObj = actionForm.querySelector("input[name='page']")
-        const boardUL = document.querySelector(".boardUL")
+        const pageInput = actionForm.querySelector("input[name=page]")
+        const typeObj = actionForm.querySelector("select[name=type]")
+        const keywordObj = actionForm.querySelector("input[name=keyword]")
+        const btnSearch = document.querySelector(".btnSearch")
 
-        boardUL.addEventListener("click", (e) => {
-            e.preventDefault()
-            e.stopPropagation()
+        paging.addEventListener("click", (e) => {
+        //이벤트 막기
+        e.preventDefault()
+        e.stopPropagation()
 
-            const target = e.target
-            const pageNum = target.getAttribute("href")
+        //target 찾기
+        const target = e.target
+        //console.log(target.tagName)
 
-            if(!pageNum){
-                return
-            }
+        //A태그가 아니면 return
+        if(target.tagName !== "A"){
+            return
+        }
 
-            pageObj.value = pageNum
-            actionForm.setAttribute("action", `/board/list`)
-            actionForm.submit()
+        //page번호 설정
+        const pageNum = target.getAttribute("href")
+        //console.log(pageNum)
 
-        },false)
+        //input에 page변경 넘겨주기
+        pageInput.value = pageNum
+        //actionForm action 변경
+        actionForm.setAttribute("action", "/board/list")
+        //submit
+        actionForm.submit()
+        })
 
-        const {page, size} = [[${pageRequestDTO}]]
+        //검색 버튼
+        btnSearch.addEventListener("click", e => {
+        //이벤트 막기
+        e.preventDefault()
+        e.stopPropagation()
 
-        console.log(page, size)
+        //검색타입, 키워드 입력 안되었을 시 return
+        if(typeObj.options[typeObj.selectedIndex].value === "" && keywordObj.value !== ""){
+            alert("검색 조건을 선택해주세요")
+            return
+        }
 
-        const {total} = [[${pageResponseDTO}]]
+        //검색 하고나면 page는 무조건 1페이지
+        pageInput.value = 1
 
-        console.log("total: " + total)
-
-        const pageLIStr = makePages(page, size, total)
-
-        boardUL.innerHTML = pageLIStr
-
-        boardTable.addEventListener("click", (e) => {
-
-            e.preventDefault()
-            e.stopPropagation()
-
-            const target = e.target
-
-            if(!target.getAttribute("data-bno")){
-                return
-            }
-
-            console.log(actionForm)
-
-            const bno = target.getAttribute("data-bno")
-
-            console.log("BNO: " + bno)
-            actionForm.setAttribute("action", `/board/read/${bno}`)
-
-            actionForm.submit();
-            
-
+        actionForm.submit()
         }, false)
+
+        //등록, 삭제 Modal Show
+        if([[${message}]] != null){
+        alertModal.show()
+        }
 
 
     </script>

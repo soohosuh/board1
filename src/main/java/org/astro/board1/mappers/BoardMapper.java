@@ -1,7 +1,8 @@
 package org.astro.board1.mappers;
 
 import org.astro.board1.dto.BoardDTO;
-import org.astro.board1.dto.BoardImageDTO;
+import org.astro.board1.dto.BoardListDTO;
+import org.astro.board1.dto.FileUploadDTO;
 import org.astro.board1.dto.PageRequestDTO;
 
 import java.util.List;
@@ -9,7 +10,7 @@ import java.util.List;
 public interface BoardMapper {
 
     //board list
-    List<BoardDTO> getList(PageRequestDTO pageRequestDTO);
+    List<BoardListDTO> getList(PageRequestDTO pageRequestDTO);
 
     //board count
     long listCount(PageRequestDTO pageRequestDTO);
@@ -25,7 +26,10 @@ public interface BoardMapper {
     //board modify
     int modifyOne(BoardDTO boardDTO);
 
-    void setBoardImage(BoardImageDTO imageDTO);
+    //void setBoardImage(FileUploadDTO imageDTO);
+    
+    //board viewcnt
+    int viewCount(Integer bno);
 
     
     

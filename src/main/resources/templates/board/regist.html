@@ -1,22 +1,154 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/lteLayout.html}"
+      >
 
-
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Board Register</title>
+</head>
 
 <body>
 
-<div>
+<div class="container-fluid pt-4 px-4" layout:fragment="content">
   <h1>REGIST</h1>
-  <div>
-    <form action="/board/regist" method="post">
-        <input type="text" name="title">
-        <input type="text" name="writer">
-        <input type="text" name="content">
-        <button type="submit">등록</button>
-    </form>
+  <div class="col-md-12">
+    <div class="card card-primary">
+      <div class="card-header">
+        <h3 class="card-title">Board Register</h3>
+      </div>
+
+      <form name="frm" method="post" class="formData">
+        <input type="hidden" name="bno">
+        <div class="mb-3">
+          <label for="boardTitle" class="form-label">Title</label>
+          <input type="text" name="title" class="form-control" id="boardTitle">
+        </div>
+        <div class="mb-3">
+          <label for="boardContent" class="form-label">Content</label>
+          <textarea name="content" class="form-control" id="boardContent" style="height:100px;resize:none;"></textarea>
+        </div>
+        <div class="mb-3">
+          <label for="boardWriter" class="form-label">Writer</label>
+          <input type="text" name="writer" class="form-control" id="boardWriter">
+        </div>
+        <div class="mb-3">
+          <label for="boardFile" class="form-label">File Upload</label>
+          <input type="file" name="upload" multiple class="form-control uploadInput" id="boardFile">
+        </div>
+        <div class="uploadHidden"></div>
+      </form>
+      <div class="button_wrap">
+        <button type="button" class="btn btn-primary btnAddForm">Register</button>
+        <a href="/board/list" class="btn btn-danger">Cancel</a>
+      </div>
+      <div class="uploadWrap">
+        <ul class="uploadUL"></ul>
+      </div>
   </div>
+  </div>
+
+  <div class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-body"></div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  
   
 </div>
+
+<script layout:fragment="script" th:inline="javascript">
+
+  // const modalView = document.querySelector(".modal")
+  const modalView = new bootstrap.Modal(document.querySelector(".modal"))
+  const modalPop = document.querySelector(".modal-body")
+  const btnAddForm = document.querySelector(".btnAddForm")
+  const uploadInput = document.querySelector(".uploadInput")
+  const uploadUL = document.querySelector(".uploadUL")
+  const uploadHidden = document.querySelector(".uploadHidden")
+
+  //const btnAddFrom = document.querySelector(".btnAddFrom")
+
+  // btnAddFrom.addEventListener("click", (e) => {
+
+  //   e.preventDefault()
+  //   e.stopPropagation()
+
+  //   modalView.show()
+  // })
+
+  //파일 업로드
+  uploadInput.addEventListener("change", e => {
+
+    //file 없으면 리턴
+    if(!uploadInput.files || uploadInput.files.length === 0) {
+      return
+    }
+    //form data
+    const formData = new FormData()
+
+    //formData에 파일 넣어주기
+    for(let i = 0; i < uploadInput.files.length; i++) {
+      formData.append("files", uploadInput.files[i])
+    }
+    //console.dir(formData)
+
+    //http header 타입 지정
+    const header = {headers: {"Content-Type": "multipart/form-data"}}
+
+    //파일 업로드 axios 호출
+    axios.post("http://localhost:8080/api/files/upload", formData, header).then(res => {
+      const result = res.data
+      console.log("---------------------------")
+      showProducts(result)
+    })
+  })
+
+
+  // /파일 업로드
+
+  //등록버튼 클릭
+  btnAddForm.addEventListener("click", e => {
+
+    console.log("ASasASasASasa");
+    if(frm.title.value === "") {
+      modalPop.innerHTML = "제목을 입력해주세요."
+      modalView.show()
+    }else if(frm.content.value === "") {
+      modalPop.innerHTML = "내용을 입력해주세요."
+      modalView.show()
+    }else if(frm.writer.value === "") {
+      modalPop.innerHTML = "작성자를 입력해주세요."
+      modalView.show()
+    }else if(!uploadInput.files || uploadInput.files.length === 0){
+      modalPop.innerHTML = "파일을 등록 해주세요."
+      modalView.show()
+    }else {
+      //li 전부 셀렉트
+      const liArr = uploadUL.querySelectorAll("li")
+
+      //li개수만큼 for문 돌려서 input hidden 추가
+      let str = ""
+      for(let liObj of liArr) {
+        //console.log(liObj)
+        const originName = liObj.getAttribute("data-originname")
+        //console.log(uuid, " / "+fileName)
+        //console.log("---------------------------------")
+        str += `<input type="hidden" name="fileNames" value="${originName}">`
+      }
+
+      uploadHidden.innerHTML += str
+      frm.submit()
+    }
+  }, false)
+</script>
 </body>
 </html>

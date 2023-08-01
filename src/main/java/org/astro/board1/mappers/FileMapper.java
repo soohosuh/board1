@@ -10,6 +10,5 @@ public interface FileMapper {
 
     int deleteImage(Integer bno);
 
-    int updateImage(List<Map<String, String>> imageList);
     
 }
