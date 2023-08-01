@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @lombok.ToString
 public class BoardImageDTO {
 
-    private Long image_bno;
+    private Integer image_bno;
 
     //DB 처리 용도
     private String image;

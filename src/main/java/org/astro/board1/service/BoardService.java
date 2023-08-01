@@ -25,5 +25,5 @@ public interface BoardService {
     //modify
     int modifyOne(BoardDTO boardDTO);
 
-    List<String> getImages(Integer pno);
+    //List<String> getImages(Integer pno);
 }
