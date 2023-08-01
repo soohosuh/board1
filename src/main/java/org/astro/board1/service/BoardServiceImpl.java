@@ -2,13 +2,15 @@ package org.astro.board1.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import net.coobird.thumbnailator.Thumbnailator;
+
 import org.astro.board1.dto.BoardDTO;
 import org.astro.board1.dto.BoardImageDTO;
 import org.astro.board1.dto.PageRequestDTO;
 import org.astro.board1.dto.PageResponseDTO;
-import org.astro.board1.dto.UploadResultDTO;
 import org.astro.board1.mappers.BoardMapper;
 import org.astro.board1.mappers.FileMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -36,6 +38,17 @@ public class BoardServiceImpl implements BoardService{
     private final BoardMapper boardMapper;
     private final FileMapper fileMapper;
     private final ServletContext servletContext;
+
+    @Value("${org.astro.upload.path}")
+    private String path;
+
+    //예외처리
+    public static class UploadException extends RuntimeException{
+    
+        public UploadException(String msg){
+            super(msg);
+        }
+    }
 
     //list
     @Override
@@ -106,7 +119,7 @@ public class BoardServiceImpl implements BoardService{
         //이름을 디비에 저장
         log.info("여기 잘들어왔어 222222");
         BoardImageDTO boardImageDTO = new BoardImageDTO();
-        Long bno = boardMapper.insertOne(boardDTO); 
+        Integer bno = boardMapper.insertOne(boardDTO); 
         boardImageDTO.setImage_bno(boardDTO.getBno());
         log.info("=======================================");
         
@@ -121,7 +134,7 @@ public class BoardServiceImpl implements BoardService{
     }
 
 
-    }
+    
 
     @Override
     public int deleteOne(Integer bno) {
@@ -143,33 +156,7 @@ public class BoardServiceImpl implements BoardService{
         List<String> fileNames = boardDTO.getFileNames();
         log.info(fileNames);
 
-        //게시판 등록 성공과 파일이 등록되었다면 실행
-        if (count > 0) {
-            //bno 가져오기
-            Integer bno = boardDTO.getBno();
-            log.info("--------------------------------- bno: " + bno);
-
-            AtomicInteger index = new AtomicInteger();
-
-            //등록된 파일 fileNames에서 추출
-            List<Map<String, String>> list = fileNames.stream().map(str -> {
-                //uuid 가져오기
-                String uuid = str.substring(0, 36);
-                //실제 파일명 가져오기
-                String fileName = str.substring(37);
-
-                //return map에 담기
-                return Map.of("uuid", uuid, "file_name", fileName, "bno", "" + bno, "ord", "" + index.getAndIncrement());
-            }).collect(Collectors.toList());
-
-            log.info("=====================================================================");
-            log.info("=====================================================================");
-            log.info(list);
-
-            //파일 등록 실행
-            fileMapper.registerImage(list);
-
         
-        
-    }
+}
+
 }
