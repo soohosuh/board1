@@ -18,13 +18,13 @@
       <h2 class="mb-4">Board Read</h2>
       <hr>
       <h4 class="mb-4">No</h4>
-      <div class="alert alert-light" role="alert">[[${dto.bno}]]</div>
+      <div class="alert alert-light" role="alert">[[${read.bno}]]</div>
       <h4 class="mb-4">Title</h4>
-      <div class="alert alert-light" role="alert">[[${dto.title}]]</div>
+      <div class="alert alert-light" role="alert">[[${read.title}]]</div>
       <h4 class="mb-4">Writer</h4>
-      <div class="alert alert-light" role="alert">[[${dto.writer}]]</div>
+      <div class="alert alert-light" role="alert">[[${read.writer}]]</div>
       <h4 class="mb-4">Content</h4>
-      <div class="alert alert-light" role="alert" style="min-height: 100px;">[[${dto.content}]]</div>
+      <div class="alert alert-light" role="alert" style="min-height: 100px;">[[${read.content}]]</div>
       <!-- <th:block th:if="${read.fileNames.size()}">
         <h4 class="mb-4">File</h4>
         <div class="uploadWrap mb-3">
@@ -37,8 +37,8 @@
           </ul>
         </div>
         </th:block> -->
-      <h4 class="mb-4">Duedate</h4>
-      <div class="alert alert-light" role="alert">[[${dto.duedate}]]</div>
+      <h4 class="mb-4">Date</h4>
+      <div class="alert alert-light" role="alert">[[${read.modifyDate}]]</div>
       <div class="button_wrap">
         <a th:href="@{|/board/list?${pageRequestDTO.link}|}" class="btn btn-primary btnList">List</a>
         <a th:href="@{|/board/modify/${bno}?${pageRequestDTO.link}|}" class="btn btn-info text-white btnModify">Modify</a>
@@ -51,8 +51,8 @@
           <h6 class="mb-0">Reply Register</h6>
         </div>
         <div class="mb-3 replyRegister">
-          <input type="hidden" name="bno" th:value="${dto.bno}">
-          <input type="hidden" name="reply" class="form-control">
+          <input type="hidden" name="bno" th:value="${read.bno}">
+          <input type="text" name="reply" class="form-control">
           <input type="hidden" name="replyer" value="USER00">
         </div>
         <div class="button_wrap">
@@ -92,7 +92,7 @@
             Reply Register 
           </div>
           <div class="modal-body replyRegister2">
-            <input type="hidden" name="bno" th:value="${dto.bno}">
+            <input type="hidden" name="bno" th:value="${read.bno}">
             <input type="text" name="reply" class="form-control">
             <input type="text" name="replyer" value="USER00">
             <input type="hidden" name="gno" value="0">
@@ -106,7 +106,7 @@
       </div>
     </div>
 
-    <div class="modal replyModModal" tabindex="-1" role="dialog">
+    <div class="modal replyMoModal" tabindex="-1" role="dialog">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
@@ -115,9 +115,7 @@
           <div class="modal-body replyModify">
             <input type="hidden" name="reply" class="form-control">
             <input type="hidden" name="replyer" value="USER00">
-            <div class="replyModifyVal">
-
-            </div>
+            <div class="replyModifyVal"></div>
           </div>
           <div class="modal-footer">
             <button class="btn btn-primary btnReplyModify">Reply Modify</button>
@@ -142,10 +140,10 @@
 <script layout:fragment="script" th:inline = "javascript">
 
     const realPath = "http://" + window.location.host;
-    const {bno, status} = [[${dto}]]
+    const {bno, status} = [[${read}]]
     const alertModal = new bootstrap.Modal(document.querySelector(".alertModal"))
     const replyModal = new bootstrap.Modal(document.querySelector(".replyModal"))
-    const replyModModal = new bootstrap.Modal(document.querySelector(".replyModModal"))
+    const replyMoModal = new bootstrap.Modal(document.querySelector(".replyMoModal"))
     const replyPaging = document.querySelector(".replyPaging")
     const replyWrap = document.querySelector(".replyWrap")
     const replyRegister = document.querySelector(".replyRegister")
@@ -153,7 +151,7 @@
     const replyGno = replyRegister2.querySelector(".replyGno")
     const replyModify = document.querySelector(".replyModify")
     const replyModifyVal = replyModify.querySelector(".replyModifyVal")
-    const btnRegister = document.querySelector(".btnRegister")
+    //const btnRegister = document.querySelector(".btnRegister")
     const btnRegister2 = document.querySelector(".btnRegister2")
     const btnDelete = document.querySelector(".btnDelete")
     const btnReplyModify = document.querySelector(".btnReplyModify")
@@ -161,13 +159,13 @@
 
     const btnRegisterForm = document.querySelector(".btnRegisterForm")
 
-    btnRegisterForm.addEventListener("click", (e) => {
+    // btnRegisterForm.addEventListener("click", (e) => {
 
-      e.preventDefault()
-      e.stopPropagation()
+    //   e.preventDefault()
+    //   e.stopPropagation()
 
-      replyModal.show()
-    })
+    //   replyModal.show()
+    // })
 
 
 
@@ -191,33 +189,32 @@
 
     //댓글
     //댓글 등록
-    // btnRegister.addEventListener("click", (e) => {
-    //   //이벤트 막기
-    //   e.preventDefault()
-    //   e.stopPropagation()
+    btnRegisterForm.addEventListener("click", (e) => {
+      //cosole.log(btnRegisterForm)
+      //이벤트 막기
+      e.preventDefault()
+      e.stopPropagation()
 
-    //   //value 가져오기
-    //   const bno = replyRegister.querySelector("input[name=bno]").value
-    //   const reply = replyRegister.querySelector("input[name=reply]").value
-    //   const replyer = replyRegister.querySelector("input[name=replyer]").value
+      //value 가져오기
+      const bno = replyRegister.querySelector("input[name=bno]").value
+      const reply = replyRegister.querySelector("input[name=reply]").value
+      const replyer = replyRegister.querySelector("input[name=replyer]").value
 
-    //   if(reply === ''){
-    //     alert("댓글 내용을 입력하세요")
-    //     return
-    //   }
+      if(reply === ''){
+        alert("댓글 내용을 입력해주세요.")
+        return
+      }
+      
+      //객체로 만들기
+      const temp = {bno, reply, replyer}
 
-    //   replyModal.show();
-
-    //   //객체로 만들기
-    //   const temp = {bno, reply, replyer, gno}
-
-    //   postRegister(temp).then(data => {
-    //     alert(data.result + "번 댓글이 등록되었습니다.")
-    //     replyRegister.querySelector("input[name=reply]").value = ""
-    //     getListDefault()
-    //   })
-    // }, false)
-    // // /댓글 등록
+      postRegister(temp).then(data => {
+        alert(data.result + "번 댓글이 등록되었습니다.")
+        replyRegister.querySelector("input[name=reply]").value = ""
+        getListDefault()
+      })
+    }, false)
+    // /댓글 등록
 
     //대댓글 모달 보여주기
     replyWrap.addEventListener("click", (e) => {
@@ -232,10 +229,6 @@
 
       if(result === "reply"){
         replyModal.show()
-        replyRegister2.querySelector("input[name=reply]").value = ""
-        replyGno.innerHTML = `<input type="hidden" name="gno" value="${gno}">`
-      }else if(result === "modify"){
-        replyModModal.show()
         replyRegister2.querySelector("input[name=reply]").value = ""
         replyGno.innerHTML = `<input type="hidden" name="gno" value="${gno}">`
       }
@@ -282,13 +275,13 @@
 
       getReadOne(rno).then(data => {
         console.log(data)
-        if(!data.status){
+        if(data.status){
           alert("삭제된 댓글입니다")
           return
         }
-        replyModal.hide()
+        replyMoModal.show()
         replyModify.querySelector("input[name=reply]").value = data.reply
-        replyModifyVal.innerHTML = `<input type="text" name="rno" value="${rno}">`
+        replyModifyVal.innerHTML = `<input type="hidden" name="rno" value="${rno}">`
       })
     }, false)
     // /댓글 수정모달
@@ -300,11 +293,11 @@
       e.stopPropagation()
       //target 찾기
       const target = e.target
-      const rno = target.closet(".replyMoModal").querySelector("input[name=rno]").value
+      const rno = target.closest(".replyMoModal").querySelector("input[name=rno]").value
 
       deleteReply(rno).then(data => {
         alert(`${rno}번 댓글이 삭제 되었습니다.`)
-        replyModModal.hide()
+        replyMoModal.hide()
         getListDefault()
       })
     })
@@ -313,23 +306,13 @@
     //댓글 수정
     btnReplyModify.addEventListener("click", (e) => {
 
-      const target = e.target
-      console.log("-----------------------------------------")
-
-      const rno = target.getAttribute("data-rno")
-      console.log(rno)
-      //event 막기
       e.preventDefault()
       e.stopPropagation()
+
       //target 찾기
-      
-      //const rno = replyModify.querySelector("input[name=rno]").value
-      const reply = replyModify.querySelector("input[name=reply]").value
-
-
-      console.log("========")
-      console.log(rno)
-      console.log(reply)
+      const target = e.target
+      const rno = replyModify.querySelector("input[name=rno]").value
+      const reply = replyModify.querySelector("input[name=reply]").value  
 
       //객체로 만들기
       const temp = {rno, reply}
@@ -337,7 +320,7 @@
       putReply(temp).then(data => {
         alert(data.result + "번 댓글이 수정되었습니다.")
         getListDefault()
-        replyModModal.hide()
+        replyMoModal.hide()
       })
     })
     // /댓글 수정

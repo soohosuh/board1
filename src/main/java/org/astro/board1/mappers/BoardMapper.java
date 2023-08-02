@@ -18,6 +18,7 @@ public interface BoardMapper {
     //board read
     BoardDTO getOne(Integer bno);
 
+    //board regist
     int insertOne(BoardDTO boardDTO);
 
     //board delete

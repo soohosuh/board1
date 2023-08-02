@@ -21,7 +21,7 @@ public class BoardDTO {
     private String content;         //내용
     private String writer;          //작성자
     private String duedate;         //등록일
-    private LocalDate modifyDate;   //수정일
+    private String modifyDate;   //수정일
 
     private boolean status;     //상태여부
   

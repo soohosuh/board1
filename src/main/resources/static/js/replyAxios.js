@@ -11,7 +11,7 @@ const postRegister = async(data) => {
 console.log(data)
 
 
-  const res = await axios.post(`${realPath}/replies/${bno}/register`, data)
+  const res = await axios.post(`${realPath}/replies/${bno}/regist`, data)
   return res.data
 }
 

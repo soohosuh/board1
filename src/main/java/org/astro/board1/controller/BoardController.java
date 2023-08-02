@@ -51,6 +51,7 @@ public class BoardController {
 
         //DTO 로 선언
         BoardDTO boardDTO = boardService.getOne(bno);
+        log.info(boardDTO);
 
         model.addAttribute("read", boardDTO);
 

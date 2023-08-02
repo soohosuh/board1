@@ -6,20 +6,26 @@
 <mapper namespace="org.astro.board1.mappers.ReplyMapper">
 
     <!-- 목록 -->
-    <select id="selectList" resultType="org.astro.board1.dto.ReplyDTO">
-        select rno, gno, bno, reply, replyer
+    <select id="getList" resultType="org.astro.board1.dto.ReplyDTO">
+        select rno, gno, bno, reply, replyer, replyDate
         from tbl_reply where bno = #{bno} 
     </select>
 
+    <!-- total -->
+    <select id="getBnoCount" resultType="int">
+        select count(rno) from tbl_reply where bno = #{bno}
+    </select>
+
+    <!-- read -->
     <select id="selectOne" resultType="org.astro.board1.dto.ReplyDTO">
         select rno, bno, reply, replyer ,gno
         from tbl_reply where rno = #{rno}
     </select>
 
     <!-- 등록 -->
-    <insert id="insert">
-        insert into tbl_reply (bno,reply,replyer)
-        values (#{bno}, #{reply}, #{replyer})
+    <insert id="register">
+        insert into tbl_reply (bno,reply,replyer,gno)
+        values (#{bno}, #{reply}, #{replyer}, #{gno})
 
         <selectKey resultType="int" keyProperty="rno" order="AFTER">
             SELECT LAST_INSERT_ID()
@@ -28,7 +34,12 @@
 
     <!-- 수정 -->
     <update id="modifyReply">
-        update tbl_reply set reply=#{reply}, replyDate=#{replyDate} where bno=#{bno} and rno=#{rno}
+        update tbl_reply set reply=#{reply}, replyDate=now() where rno=#{rno}
+    </update>
+
+    <!-- 삭제 -->
+    <update id="delete">
+        update tbl_reply set reply='삭제된 댓글 입니다', replyDate=now(), status = false where rno=#{rno}
     </update>
 
 

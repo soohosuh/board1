@@ -8,12 +8,19 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public interface ReplyService {
 
-    PageResponseDTO<ReplyDTO> getList(Long bno, PageRequestDTO pageRequestDTO);
+    //list
+    PageResponseDTO<ReplyDTO> getList(Integer bno, PageRequestDTO pageRequestDTO);
 
-    ReplyDTO selectOne(Long rno);
+    //read
+    ReplyDTO selectOne(Integer rno);
 
-    Long register(ReplyDTO replyDTO);
+    //register
+    Integer register(ReplyDTO replyDTO);
 
-    int modifyReply(ReplyDTO replyDTO);
+    //modify
+    void modifyReply(ReplyDTO replyDTO);
+
+    //delete
+    void delete(Integer rno);
     
 }

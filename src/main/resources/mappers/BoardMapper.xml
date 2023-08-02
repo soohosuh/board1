@@ -5,6 +5,7 @@
 
 <mapper namespace="org.astro.board1.mappers.BoardMapper">
 
+    <!-- regist -->
     <insert id="insertOne">
         insert into tbl_board (title,content,writer)
         values (#{title}, #{content}, #{writer})
@@ -13,23 +14,27 @@
             SELECT LAST_INSERT_ID()
         </selectKey>
     </insert>
-
-    <select id="getList" resultType="org.astro.board1.dto.BoardDTO">
+    <!-- list -->
+    <select id="getList" resultType="org.astro.board1.dto.BoardListDTO">
         select * from tbl_board order by bno desc limit #{skip}, #{size}    
     </select>
 
+    <!-- read -->
     <select id="getOne" resultType="org.astro.board1.dto.BoardDTO">
         select * from tbl_board where bno = #{bno}
     </select>
 
+    <!-- delete -->
     <delete id="deleteOne">
         delete from tbl_board where bno = #{bno}
-    </delete>                                                       
+    </delete> 
 
+    <!-- modify -->
     <update id="modifyOne">
         update tbl_board set title = #{title}, content = #{content}, writer = #{writer} where bno = #{bno}
     </update>
 
+    <!-- total -->
     <select id="listCount" resultType="long">
         select count(*) from (select bno from tbl_board where bno > 0 limit #{countEnd}) board  
     </select>

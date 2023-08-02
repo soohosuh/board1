@@ -18,37 +18,53 @@ public class ReplyServiceImpl implements ReplyService {
 
     private final ReplyMapper replyMapper;
 
+    //list
     @Override
-    public PageResponseDTO<ReplyDTO> getList(Long bno, PageRequestDTO pageRequestDTO) {
+    public PageResponseDTO<ReplyDTO> getList(Integer bno, PageRequestDTO pageRequestDTO) {
+
+        int total = replyMapper.getBnoCount();
 
         //pageRequestDTO.setSize(100);
-        List<ReplyDTO> list = replyMapper.selectList(bno, pageRequestDTO);
+        List<ReplyDTO> list = replyMapper.getList(bno, pageRequestDTO);
         //int total = replyMapper.getBnoCount(bno);
 
         return PageResponseDTO.<ReplyDTO>withAll()
         .list(list)
+        .total(total)
+        .pageRequestDTO(pageRequestDTO)
         .build();
         
     }
 
+    //read
     @Override
-    public ReplyDTO selectOne(Long rno) {
+    public ReplyDTO selectOne(Integer rno) {
         
         return replyMapper.selectOne(rno);
     }
 
+    //regist
     @Override
-    public Long register(ReplyDTO replyDTO) {
+    public Integer register(ReplyDTO replyDTO) {
         
-        return replyMapper.insert(replyDTO);
+        return replyMapper.register(replyDTO);
 
     }
-
+    
+    //modify
     @Override
-    public int modifyReply(ReplyDTO replyDTO) {
+    public void modifyReply(ReplyDTO replyDTO) {
         
-        return replyMapper.modifyReply(replyDTO);
+        replyMapper.modifyReply(replyDTO);
     }
+
+    //delete
+    @Override
+    public void delete(Integer rno) {
+        replyMapper.delete(rno);
+    }
+
+    
     
     
 }

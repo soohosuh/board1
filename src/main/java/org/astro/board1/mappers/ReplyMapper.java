@@ -9,15 +9,21 @@ import org.astro.board1.dto.ReplyDTO;
 public interface ReplyMapper {
     
     //목록
-    List<ReplyDTO> selectList(@Param("bno")long bno, @Param("dto")PageRequestDTO pageRequestDTO);
+    List<ReplyDTO> getList(@Param("bno")Integer bno, @Param("pr")PageRequestDTO pageRequestDTO);
 
+    //total
+    int getBnoCount();
 
-    ReplyDTO selectOne(Long rno);
+    //read
+    ReplyDTO selectOne(Integer rno);
     
     //등록
-    Long insert(ReplyDTO replyDTO);
+    int register(ReplyDTO replyDTO);
 
     //수정
     int modifyReply(ReplyDTO replyDTO);
+
+    //delete
+    int delete(Integer rno);
 
 }
