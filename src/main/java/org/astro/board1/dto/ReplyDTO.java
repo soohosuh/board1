@@ -12,16 +12,15 @@ import lombok.ToString;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 public class ReplyDTO {
 
     private int rno;
     private int bno;
     private String reply;
     private String replyer;
-    private LocalDate replyDate;
+    private String replyDate;
     @Builder.Default
-    private long gno = 0L;
+    private int gno = 0L;              //대댓글처리 번호 0 default설정
     private int step;                   //대댓글 여부 확인
     private boolean status;             //댓글 삭제여부
 }

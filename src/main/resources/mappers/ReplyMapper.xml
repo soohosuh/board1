@@ -23,10 +23,10 @@
     </select>
 
     <!-- 등록 -->
-    <insert id="register">
-        insert into tbl_reply (bno,reply,replyer,gno)
-        values (#{bno}, #{reply}, #{replyer}, #{gno})
-
+    <insert id="registerReply">
+        insert into tbl_reply (bno,reply,replyer)
+        values (#{bno}, #{reply}, #{replyer})
+        <!-- 마지막 rno -->
         <selectKey resultType="int" keyProperty="rno" order="AFTER">
             SELECT LAST_INSERT_ID()
         </selectKey>

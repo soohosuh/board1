@@ -43,7 +43,7 @@ const getListDefault = (replyLast, page) => {
     for(let i = 0; i < arr.list.length; i++){
       const {reply, replyer, replyDate, step, gno, rno} = arr.list[i]
       replyStr += `
-        <div class="d-flex align-items-center py-3 border-top${step === 0 ? "" : " ps-3"}">
+        <div class="d-flex align-items-center py-3 border-top" style="${step === 0 ? "" : "padding-left:15px"}">
           <div class="w-100">
             <div class="d-flex w-100 justify-content-between">
               <h6 class="mb-0">${reply}</h6>
