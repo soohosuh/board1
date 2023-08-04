@@ -47,12 +47,12 @@ public class ReplyController {
     @PostMapping("{bno}/register")
     public Map<String, Integer> register(@PathVariable("bno")Integer bno, @RequestBody ReplyDTO replyDTO){
 
-        log.info("bno"  + bno);
+        log.info("post | replyRegister-----------------------------");
         
         //안전장치
         replyDTO.setBno(bno);
-        log.info(replyDTO);
 
+        //rno 설정
         Integer rno = service.register(replyDTO);
 
         log.info(rno);

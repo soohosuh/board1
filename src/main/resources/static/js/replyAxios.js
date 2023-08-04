@@ -11,7 +11,7 @@ const postRegister = async(data) => {
 console.log(data)
 
 
-  const res = await axios.post(`${realPath}/replies/${bno}/regist`, data)
+  const res = await axios.post(`${realPath}/replies/${bno}/register`, data)
   return res.data
 }
 
@@ -43,7 +43,7 @@ const getListDefault = (replyLast, page) => {
     for(let i = 0; i < arr.list.length; i++){
       const {reply, replyer, replyDate, step, gno, rno} = arr.list[i]
       replyStr += `
-        <div class="d-flex align-items-center py-3 border-top" style="${step === 0 ? "" : "padding-left:15px"}">
+        <div class="d-flex align-items-center py-3 border-top" style="${step === 0 ? "" : "padding-left:20px"}">
           <div class="w-100">
             <div class="d-flex w-100 justify-content-between">
               <h6 class="mb-0">${reply}</h6>

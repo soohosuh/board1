@@ -73,9 +73,9 @@ public class ReplyServiceImpl implements ReplyService {
             if(count != 1){
                 throw new RuntimeException("Reply Insert Exception");
             }
-            return result;
+            result = replyDTO.getRno();
         }
-
+            return result;
     }
     
     //modify

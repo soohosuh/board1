@@ -8,7 +8,7 @@
     <!-- 목록 -->
     <select id="getList" resultType="org.astro.board1.dto.ReplyDTO">
         select rno, gno, bno, reply, replyer, replyDate
-        from tbl_reply where bno = #{bno} 
+        from tbl_reply where bno = #{bno} and status = true 
     </select>
 
     <!-- total -->
@@ -29,6 +29,22 @@
         <!-- 마지막 rno -->
         <selectKey resultType="int" keyProperty="rno" order="AFTER">
             SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <!-- register 댓글 gno에 rno대입 -->
+    <update id="updateReplyGno">
+        update tbl_reply set gno = #{rno} where rno = #{rno} 
+    </update>
+    <!-- //register 댓글 -->
+
+    <!-- register 대댓글 -->
+    <insert id="registerReplyChild">
+        insert into tbl_reply (bno, reply, replyer, gno)
+        values (#{bno}, #{reply}, #{replyer}, #{gno})
+        <!-- 마지막 rno -->
+        <selectKey resultType="int" keyProperty="rno" order="AFTER">
+            select last_insert_id()
         </selectKey>
     </insert>
 
