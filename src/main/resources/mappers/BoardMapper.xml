@@ -5,38 +5,169 @@
 
 <mapper namespace="org.astro.board1.mappers.BoardMapper">
 
-    <!-- regist -->
-    <insert id="insertOne">
-        insert into tbl_board (title,content,writer)
-        values (#{title}, #{content}, #{writer})
+    
+    <!-- list V3 -->
+    <select id="getList" resultType="BoardListDTO">
+        select br.bno, br.title, br.writer, br.dueDate, br.replycnt,
+            pi.images as fileNames
+        from (select b.bno, b.title, b.content, b.writer, b.dueDate,
+            COUNT(r.rno) as replycnt
+        from tbl_board b
+        left join tbl_reply r on r.bno = b.bno
+        where b.bno > 0
+        <if test="keyword != null and types != null">
+        <trim prefix="and (" prefixOverrides="or" suffix=")">
+            <foreach collection="types" item="type" separator=" or ">
+            <if test='type == "t"'>
+                b.title like concat('%', #{keyword}, '%')
+            </if>
+            <if test='type == "c"'>
+                b.content like concat('%', #{keyword}, '%')
+            </if>
+            <if test='type == "w"'>
+                b.writer like concat('%', #{keyword}, '%')
+            </if>
+            </foreach>
+        </trim>
+        </if>
+        group by b.bno
+        order by b.bno desc
+        limit #{skip}, #{size}) as br
+        left outer join tbl_board_image pi
+        on pi.bno = br.bno
+        and (pi.ord = 0 or pi.ord is null)
 
+        order by br.bno desc
+
+        <!--
+        V1
+        select b.bno, b.title, b.writer, b.dueDate, count(r.rno) as replycnt
+        from tbl_board b
+        left join tbl_reply r
+        on r.bno = b.bno
+        where b.bno > 0 and status = true
+        <if test="keyword != null and type != ''">
+        <trim prefix="and (" prefixOverrides="or" suffix=")">
+            <if test='type == "t"'>
+            or title like concat('%', #{keyword}, '%')
+            </if>
+            <if test='type == "c"'>
+            or content like concat('%', #{keyword}, '%')
+            </if>
+            <if test='type == "w"'>
+            or writer like concat('%', #{keyword}, '%')
+            </if>
+        </trim>
+        </if>
+        group by b.bno
+        order by b.bno desc
+        limit #{skip}, #{size}
+
+        V2
+        select b.bno, b.title, b.writer, b.dueDate, count(r.rno) as replycnt,
+            b.viewcnt, group_concat(distinct pi.uuid,'_',pi.file_name) as fileName
+        from tbl_board b
+        left join tbl_reply r
+        on r.bno = b.bno
+        left outer join tbl_board_image pi
+        on pi.bno = b.bno
+        where b.bno > 0 and b.status = true and (pi.ord = 0 or pi.ord is null)
+        <if test="keyword != null and types != null">
+        <trim prefix="and (" prefixOverrides="or" suffix=")">
+            <foreach collection="types" item="type" separator=" OR ">
+            <if test='type == "t"'>
+                title like concat('%', #{keyword}, '%')
+            </if>
+            <if test='type == "c"'>
+                content like concat('%', #{keyword}, '%')
+            </if>
+            <if test='type == "w"'>
+                writer like concat('%', #{keyword}, '%')
+            </if>
+            </foreach>
+        </trim>
+        </if>
+        group by b.bno
+        order by b.bno desc
+        limit #{skip}, #{size}
+        -->
+    </select>
+
+    <!-- register -->
+    <insert id="insertOne">
+        insert into tbl_board
+        (title, content, writer)
+        values (#{title}, #{content}, #{writer})
         <selectKey resultType="int" keyProperty="bno" order="AFTER">
-            SELECT LAST_INSERT_ID()
+        select last_insert_id()
         </selectKey>
     </insert>
-    <!-- list -->
-    <select id="getList" resultType="org.astro.board1.dto.BoardListDTO">
-        select * from tbl_board order by bno desc limit #{skip}, #{size}    
-    </select>
 
     <!-- read -->
-    <select id="getOne" resultType="org.astro.board1.dto.BoardDTO">
-        select * from tbl_board where bno = #{bno}
+    <select id="getOne" resultMap="fileListMap">
+        select tb.bno, tb.title, tb.content, tb.writer, tb.modifyDate,
+            pi.images as fileNames
+        from tbl_board tb
+        left outer join tbl_board_image pi
+        on pi.bno = tb.bno
+        where tb.bno = #{bno}
     </select>
 
+    <!-- read - file (resultMap) -->
+    <resultMap id="fileListMap" type="BoardDTO">
+        <id property="bno" column="bno"/>
+        <result property="title" column="title"/>
+        <result property="content" column="content"/>
+        <result property="writer" column="writer"/>
+        <result property="dueDate" column="dueDate"/>
+        <result property="modifyDate" column="modifyDate"/>
+        <result property="status" column="status"/>
+        <collection property="fileNames" resultMap="fileMap"/>
+    </resultMap>
+
+    <resultMap id="fileMap" type="string">
+        <result property="fileNames" column="fileNames"/>
+    </resultMap>
+    <!-- //read - file (resultMap) -->
+
     <!-- delete -->
-    <delete id="deleteOne">
-        delete from tbl_board where bno = #{bno}
-    </delete> 
+    <update id="deleteOne">
+        update tbl_board
+        set
+        title = '', content = '', writer = '', dueDate = null, modifyDate = now()
+        where bno = #{bno}
+    </update>
 
     <!-- modify -->
     <update id="modifyOne">
-        update tbl_board set title = #{title}, content = #{content}, writer = #{writer} where bno = #{bno}
+        update tbl_board
+        set
+        title = #{title}, content = #{content}, modifyDate = now()
+        where bno = #{bno}
     </update>
 
     <!-- total -->
     <select id="listCount" resultType="long">
-        select count(*) from (select bno from tbl_board where bno > 0 limit #{countEnd}) board  
+        select count(*)
+        from
+        (select bno from tbl_board
+        where bno > 0
+        <if test="keyword != null and types != null">
+        <trim prefix="and (" prefixOverrides="or" suffix=")">
+            <foreach collection="types" item="type" separator=" OR ">
+            <if test='type == "t"'>
+                title like concat('%', #{keyword}, '%')
+            </if>
+            <if test='type == "c"'>
+                content like concat('%', #{keyword}, '%')
+            </if>
+            <if test='type == "w"'>
+                writer like concat('%', #{keyword}, '%')
+            </if>
+            </foreach>
+        </trim>
+        </if>
+        limit #{countEnd}) board
     </select>
 
     

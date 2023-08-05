@@ -2,6 +2,7 @@ package org.astro.board1.service;
 
 import org.astro.board1.dto.BoardDTO;
 import org.astro.board1.dto.BoardListDTO;
+import org.astro.board1.dto.BoardRegisterDTO;
 import org.astro.board1.dto.PageRequestDTO;
 import org.astro.board1.dto.PageResponseDTO;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +19,7 @@ public interface BoardService {
     BoardDTO getOne(Integer bno);
 
     //register
-    void insertOne(BoardDTO boardDTO);
+    void insertOne(BoardRegisterDTO boardRegisterDTO);
 
     //delete
     void deleteOne(Integer bno);

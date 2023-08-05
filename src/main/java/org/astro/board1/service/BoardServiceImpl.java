@@ -6,6 +6,7 @@ import net.coobird.thumbnailator.Thumbnailator;
 
 import org.astro.board1.dto.BoardDTO;
 import org.astro.board1.dto.BoardListDTO;
+import org.astro.board1.dto.BoardRegisterDTO;
 import org.astro.board1.dto.FileUploadDTO;
 import org.astro.board1.dto.PageRequestDTO;
 import org.astro.board1.dto.PageResponseDTO;
@@ -64,19 +65,19 @@ public class BoardServiceImpl implements BoardService{
 
     //register
     @Override
-    public void insertOne(BoardDTO boardDTO) {
+    public void insertOne(BoardRegisterDTO boardRegisterDTO) {
         
         //게시판 등록
-        int count = boardMapper.insertOne(boardDTO);
+        int count = boardMapper.insertOne(boardRegisterDTO);
         log.info("insert product count: " + count);
 
         //파일 이름 List로 가져오기
-        List<String> fileNames = boardDTO.getFileNames();
+        List<String> fileNames = boardRegisterDTO.getFileNames();
         
         //게시판 등록 성공과 파일이 등록되었다면 실행
-        if(count > 0 && boardDTO.getFileNames() != null && !boardDTO.getFileNames().isEmpty()){
+        if(count > 0 && boardRegisterDTO.getFileNames() != null && !boardRegisterDTO.getFileNames().isEmpty()){
             //bno 가져오기
-            Integer bno = boardDTO.getBno();
+            Integer bno = boardRegisterDTO.getBno();
             log.info("-----------------bno: "+ bno);
 
             AtomicInteger index = new AtomicInteger();
@@ -154,7 +155,7 @@ public class BoardServiceImpl implements BoardService{
 
         
     }
-
+    //조회수 업데이트 
     @Override
     public void viewCount(Integer bno) {
         boardMapper.viewCount(bno);

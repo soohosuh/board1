@@ -12,14 +12,14 @@ public interface ReplyMapper {
     List<ReplyDTO> getList(@Param("bno")Integer bno, @Param("pr")PageRequestDTO pageRequestDTO);
 
     //total
-    int getBnoCount();
+    int getBnoCount(Integer bno);
 
     /* gno가 0일 때 실행하는 영역 */
     //register 댓글
     int registerReply(ReplyDTO replyDTO);
 
     // 댓글의 gno 업데이트
-    int updateReplyGno(Integer gno);
+    int updateReplyGno(Integer rno);
     /* //gno가 0일 때 실행하는 영역 */
 
     /* gno가 0이 아닐 때 실행하는 영역 */

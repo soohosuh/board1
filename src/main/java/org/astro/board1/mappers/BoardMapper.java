@@ -2,6 +2,7 @@ package org.astro.board1.mappers;
 
 import org.astro.board1.dto.BoardDTO;
 import org.astro.board1.dto.BoardListDTO;
+import org.astro.board1.dto.BoardRegisterDTO;
 import org.astro.board1.dto.FileUploadDTO;
 import org.astro.board1.dto.PageRequestDTO;
 
@@ -19,7 +20,7 @@ public interface BoardMapper {
     BoardDTO getOne(Integer bno);
 
     //board regist
-    int insertOne(BoardDTO boardDTO);
+    int insertOne(BoardRegisterDTO boardRegisterDTO);
 
     //board delete
     int deleteOne(Integer bno);
