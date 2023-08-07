@@ -30,6 +30,7 @@
           <div class="mb-4">
             <label for="boardFile" class="form-label">File Upload</label>
             <input type="file" name="upload" multiple class="form-control uploadInput" id="boardFile">
+            <!-- <input type="file" name="upload" multiple class="form-control uploadInput" id="boardFile"> -->
           </div>
           <div class="uploadHidden"></div>
         </form>
@@ -118,7 +119,7 @@
       const header = {headers: {"Content-Type": "multipart/form-data"}}
 
       //파일 업로드 axios 호출
-      axios.post("http://localhost:8080/files/upload", formData, header).then(res => {
+      axios.post("http://localhost:8080/api/files/upload", formData, header).then(res => {
         const result = res.data
         //console.log(result)
         showProducts(result)
@@ -166,10 +167,10 @@
     }, false)
 
     //삭제된 게시물은 list로 return처리
-    // if(!status){
-    //   alert("삭제된 게시물 입니다.");
-    //   window.location.href = "http://" + window.location.host + "/board/list"
-    // }
+    if(!status){
+      alert("삭제된 게시물 입니다.");
+      window.location.href = "http://" + window.location.host + "/board/list"
+    }
   </script>
 </body>
 </html>

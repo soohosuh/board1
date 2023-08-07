@@ -9,12 +9,12 @@
     <!-- list V3 -->
     <select id="getList" resultType="BoardListDTO">
         select br.bno, br.title, br.writer, br.dueDate, br.replycnt,
-            pi.images as fileNames
+            br.viewcnt, group_concat(distinct pi.uuid,'_',pi.file_name) as fileName
         from (select b.bno, b.title, b.content, b.writer, b.dueDate,
-            COUNT(r.rno) as replycnt
+            COUNT(r.rno) as replycnt, b.viewcnt
         from tbl_board b
         left join tbl_reply r on r.bno = b.bno
-        where b.bno > 0
+        where b.bno > 0 and b.status = true
         <if test="keyword != null and types != null">
         <trim prefix="and (" prefixOverrides="or" suffix=")">
             <foreach collection="types" item="type" separator=" or ">
@@ -37,6 +37,7 @@
         on pi.bno = br.bno
         and (pi.ord = 0 or pi.ord is null)
 
+        group by br.bno
         order by br.bno desc
 
         <!--
@@ -96,8 +97,8 @@
     <!-- register -->
     <insert id="insertOne">
         insert into tbl_board
-        (title, content, writer)
-        values (#{title}, #{content}, #{writer})
+        (title, content, writer, status)
+        values (#{title}, #{content}, #{writer} , true)
         <selectKey resultType="int" keyProperty="bno" order="AFTER">
         select last_insert_id()
         </selectKey>
@@ -106,7 +107,7 @@
     <!-- read -->
     <select id="getOne" resultMap="fileListMap">
         select tb.bno, tb.title, tb.content, tb.writer, tb.modifyDate,
-            pi.images as fileNames
+            tb.status, concat(pi.uuid,'_',pi.file_name) as fileNames
         from tbl_board tb
         left outer join tbl_board_image pi
         on pi.bno = tb.bno
@@ -169,6 +170,14 @@
         </if>
         limit #{countEnd}) board
     </select>
+
+    <!-- views -->
+    <update id="viewCount">
+        update tbl_board
+        set
+        viewcnt = viewcnt + 1
+        where bno = #{bno}
+    </update>
 
     
 

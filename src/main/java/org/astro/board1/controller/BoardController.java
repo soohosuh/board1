@@ -36,7 +36,8 @@ public class BoardController {
     @GetMapping("list")
     public void getList(PageRequestDTO pageRequestDTO, Model model){
 
-        log.info("--------------------");
+        log.info("-------------------list-");
+        
 
         PageResponseDTO<BoardListDTO> list
         = boardService.getList(pageRequestDTO);
@@ -64,14 +65,17 @@ public class BoardController {
     public void getRegist(BoardDTO boardDTO){
 
 
+
         log.info("get Regist");
     }
 
     @PostMapping("regist")
-    public String postRegist(BoardRegisterDTO boardRegisterDTO, RedirectAttributes rttr){
-        boardService.insertOne(boardRegisterDTO);
+    public String postRegist(BoardDTO boardDTO, RedirectAttributes rttr){
 
-        boardService.insertOne(boardRegisterDTO);
+        log.info("=======================11111===================================");
+        log.info(boardDTO);
+
+        boardService.insertOne(boardDTO);
 
         //redirect 메세지
         rttr.addFlashAttribute("message", "게시물이 등록 되었습니다.");
@@ -96,8 +100,10 @@ public class BoardController {
     @GetMapping("modify/{bno}")
     public String modify(PageRequestDTO pageRequestDTO, @PathVariable("bno")Integer bno, Model model){
 
+        log.info("modify-------------------------------1");
         //DTO 로 선언
         BoardDTO boardDTO = boardService.getOne(bno);
+        log.info("modify-------------------------------2");
 
         model.addAttribute("modify", boardDTO);
 
@@ -109,6 +115,9 @@ public class BoardController {
     public String postModify(RedirectAttributes rttr, BoardDTO boardDTO){
 
         log.info("=====================================================-");
+
+        log.info(boardDTO);
+
         
         boardService.modifyOne(boardDTO);   
 

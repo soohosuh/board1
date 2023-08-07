@@ -7,6 +7,7 @@ import org.astro.board1.dto.FileUploadDTO;
 import org.astro.board1.dto.PageRequestDTO;
 
 import java.util.List;
+import java.util.Map;
 
 public interface BoardMapper {
 
@@ -20,7 +21,7 @@ public interface BoardMapper {
     BoardDTO getOne(Integer bno);
 
     //board regist
-    int insertOne(BoardRegisterDTO boardRegisterDTO);
+    int insertOne(BoardDTO boardDTO);
 
     //board delete
     int deleteOne(Integer bno);
@@ -33,9 +34,6 @@ public interface BoardMapper {
     //board viewcnt
     int viewCount(Integer bno);
 
-    
-    
-    
 
 
 }

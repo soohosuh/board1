@@ -21,7 +21,7 @@ public class ReplyMapperTests {
 
         PageRequestDTO dto = PageRequestDTO.builder().build();
         
-        log.info(replyMapper.selectList(1, dto));
+        log.info(replyMapper.getList(1, dto));
 
     }
 
@@ -29,13 +29,13 @@ public class ReplyMapperTests {
     public void registTest(){
 
         ReplyDTO replyDTO = ReplyDTO.builder()
-        .bno(100L)
+        .bno(100)
         .reply("REply")
         .replyer("REPLyer")       
         .build();
 
 
-        replyMapper.insert(replyDTO);
+        replyMapper.registerReply(replyDTO);
     }
 
 }

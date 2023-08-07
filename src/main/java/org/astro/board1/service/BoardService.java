@@ -19,7 +19,7 @@ public interface BoardService {
     BoardDTO getOne(Integer bno);
 
     //register
-    void insertOne(BoardRegisterDTO boardRegisterDTO);
+    void insertOne(BoardDTO boardDTO);
 
     //delete
     void deleteOne(Integer bno);

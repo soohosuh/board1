@@ -6,7 +6,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+
+import org.springframework.web.multipart.MultipartFile;
 
 
 @Data
@@ -24,7 +27,6 @@ public class BoardDTO {
     private String modifyDate;   //수정일
 
     private boolean status;     //상태여부
-  
     
     private List<String> fileNames; //파일업로드 파일명저장
 

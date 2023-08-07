@@ -12,7 +12,7 @@
     <div class="col-sm-12 col-xl-12">
       <div class="bg-light rounded h-100 p-4">
         <h2 class="mb-4">Board Register</h2>
-        <form name="frm" method="post" class="formData">
+        <form name="frm" method="post" class="formData" >
           <input type="hidden" name="bno">
           <div class="mb-3">
             <label for="boardTitle" class="form-label">Title</label>
@@ -85,9 +85,9 @@
       const header = {headers: {"Content-Type": "multipart/form-data"}}
 
       //파일 업로드 axios 호출
-      axios.post("http://localhost:8080/files/upload", formData, header).then(res => {
+      axios.post("http://localhost:8080/api/files/upload", formData, header).then(res => {
         const result = res.data
-        //console.log(result)
+        console.log(result)
         showProducts(result)
       })
     })
