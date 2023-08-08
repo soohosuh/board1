@@ -25,7 +25,7 @@
       <div class="alert alert-light" role="alert">[[${read.writer}]]</div>
       <h4 class="mb-4">Content</h4>
       <div class="alert alert-light" role="alert" style="min-height: 100px;">[[${read.content}]]</div>
-      <!-- <th:block th:if="${read.fileNames.size()}">
+      <th:block th:if="${read.fileNames.size()}">
         <h4 class="mb-4">File</h4>
         <div class="uploadWrap mb-3">
           <ul class="uploadUL">
@@ -36,7 +36,7 @@
             </li>
           </ul>
         </div>
-        </th:block> -->
+        </th:block>
       <h4 class="mb-4">Date</h4>
       <div class="alert alert-light" role="alert">[[${read.modifyDate}]]</div>
       <div class="button_wrap">
