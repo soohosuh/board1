@@ -97,8 +97,8 @@
     <!-- register -->
     <insert id="insertOne">
         insert into tbl_board
-        (title, content, writer)
-        values (#{title}, #{content}, #{writer})
+        (title, content, writer , status)
+        values (#{title}, #{content}, #{writer} , 1)
         <selectKey resultType="int" keyProperty="bno" order="AFTER">
         select last_insert_id()
         </selectKey>

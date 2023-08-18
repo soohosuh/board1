@@ -69,7 +69,7 @@
         <div class="replyWrap"></div>
         <div class="btn-toolbar" role="toolbar" style="justify-content: center">
           <!--/* paging */-->
-          <ul class="btn-group me-2 paging replyPaging" role="group" aria-label="First group"></ul>
+          <ul class="btn-group me-2 paging replyPaging" role="group" aria-label="First group" style="list-style-type: none;"></ul>
         </div>
       </div>
     </div>
@@ -95,7 +95,7 @@
             <input type="hidden" name="bno" th:value="${read.bno}">
             <input type="text" name="reply" class="form-control">
             <input type="text" name="replyer" value="USER00">
-            <input type="hidden" name="gno" value="0">
+            <!-- <input type="hidden" name="gno" value="0"> -->
             <div class="replyGno"></div>
           </div>
           <div class="modal-footer">

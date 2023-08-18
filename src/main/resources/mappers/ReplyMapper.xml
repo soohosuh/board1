@@ -8,9 +8,9 @@
     <!-- 목록 -->
     <select id="getList" resultType="org.astro.board1.dto.ReplyDTO">
         select if(rno=gno, 0, 1)as step,  rno, bno, reply, replyer,
-        replyDate, gno
+            replyDate, gno
         from tbl_reply 
-        where bno = #{bno} and rno > 0 and status = true
+        where bno = #{bno} and rno > 0 
         order by gno asc, rno asc
         limit #{pr.skip}, #{pr.size}
     </select>

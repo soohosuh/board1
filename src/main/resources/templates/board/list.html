@@ -12,8 +12,8 @@
 <body>
 
     <div class="container-fluid pt-4 px-4" layout:fragment="content">
-        <!--/* [[${boardList}]]
-        <div>[[${pageRequestDTO}]]</div> */-->
+        <!-- [[${boardList}]] -->
+        
 
         <div class="col-sm-12 col-xl-12">
             <div class="bg-light rounded h-100 p-4">
@@ -66,7 +66,7 @@
                           <div class="ellipsis">
                             <a th:href="@{|/board/read/${list.bno}?${pageRequestDTO.link}|}">
                               <img th:if="${list.fileName}" th:src="|http://localhost/s_${list.fileName}|" />
-                              <img th:unless="${list.fileName}" th:src="|http://localhost/noimage.png|" width="80" />
+                              <!-- <img th:unless="${list.fileName}" th:src="|http://localhost/noimage.png|" width="80" /> -->
                               <span style="margin-left: 5px;">[[${list.title}]]</span>
                             </a>
                           </div>
@@ -84,11 +84,11 @@
             
             <div class="btn-toolbar" role="toolbar" style="justify-content: center;">
                 <!--/* paging */-->
-                <ul class="btn-group me-2 paging" role="group" aria-label="First group">
+                <ul class="btn-group me-2 paging" role="group" aria-label="First group" style="list-style-type: none;">
                   <li th:if="${boardList.prevBtn}"><a th:href="${boardList.startNum - 1}" class="btn btn-primary"></a></li>
       
                   <th:block th:each="i: ${#numbers.sequence(boardList.startNum, boardList.endNum)}">
-                  <li th:class="${boardList.page == i} ? 'active' : ''">
+                  <li th:class="${boardList.page == i} ? 'active' : ''" >
                     <a th:href="${i}" class="btn btn-primary">[[${i}]]</a>
                   </li>
                   </th:block>
